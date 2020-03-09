@@ -1,0 +1,4 @@
+option('gl', type: 'feature', value: 'enabled')
+option('xcb', type: 'feature', value: 'disabled')
+option('demo', type: 'boolean', value: false)
+option('tests', type: 'boolean', value: false)

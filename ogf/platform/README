@@ -1,0 +1,4 @@
+ogf-platform:
+    - ogf/primative
+    - dlg
+    - nytl

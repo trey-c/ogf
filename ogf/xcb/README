@@ -1,0 +1,6 @@
+ogf-xcb:
+    - ogf/platform
+    - ogf/gl
+    - xcb
+    - xcb-iccm
+    - cairo-xcb

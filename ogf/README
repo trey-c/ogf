@@ -1,0 +1,21 @@
+ogf:
+    * Build commands for Linux
+    > meson setup build -Dxcb=enabled -Dwerror=false
+    > cd build
+    > ninja
+
+    ogf/platform:
+        - ogf/primative
+
+    ogf/core:
+        - ogf/xcb: * Linux *
+            - ogf/platform
+            - ogf/gl
+
+    ogf/gui:
+        - ogf/core
+
+    ogf/widget:
+        - ogf/gui
+
+    * Further information is availble in each module's README file.
