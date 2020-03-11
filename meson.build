@@ -8,7 +8,7 @@ warnings = [
     '-Wextra',
     '-Wpedantic',
     '-Wno-non-virtual-dtor',
-    '-Wno-unused-parameter'
+    '-Wno-unused-parameter',
 ]
 
 cc = meson.get_compiler('cpp')

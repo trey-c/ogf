@@ -2,6 +2,13 @@
 
 `ogf` is an open source, lightweight, multi-platform GUI framework with a focus on modern graphics and scalability.
 
+### Features
+
+* 3 base widgets
+* Supports gl
+* Supports xcb
+* Supports win32
+
 ### Example
 ```cpp
 using namespace Ogf;
@@ -14,6 +21,7 @@ auto button = Widget::Label("Button", window);
 button.on_click += [&](Button &b) {
     b.label().set_text("Button Clicked");
 };
+
 window.on_quit += [&]() {
     application->exit();
 };

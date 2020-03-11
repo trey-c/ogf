@@ -31,15 +31,13 @@ int main(int argc, char **argv)
 
     auto font = client->painter()->create_font("Sans Bold", 11);
 
-    client->on_resize += [&](const Primative::Size &s) {
-        client->painter()->begin_frame();
+    client->on_paint += [&](Backend::Painter &p) {
         client->painter()->rect(Primative::Rect(0, 0, s.width(), s.height()));
         client->painter()->color(Primative::Color(33, 33, 33));
         client->painter()->fill();
         client->painter()->color(Primative::Color(255, 255, 255));
         client->painter()->text(*font.get(), "Test Text");
         client->painter()->fill();
-        client->painter()->end_frame();
     };
 
     client->map();
@@ -49,6 +47,7 @@ int main(int argc, char **argv)
 
     client->resize(Primative::Size(100, 100));
     client->set_size_limits(Primative::Size(100, 100), Primative::Size(-1, -1));
+    client->paint();
 
     client->on_quit += [&]() {
         driver.exit();

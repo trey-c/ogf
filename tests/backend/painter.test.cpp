@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/painter.hpp>
+#include <ogf/backend/painter.hpp>
 
 #include <assert.h>
 

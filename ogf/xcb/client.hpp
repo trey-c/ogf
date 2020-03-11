@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <ogf/platform/client.hpp>
+#include <ogf/backend/client.hpp>
 #include <ogf/xcb/driver.hpp>
 
 namespace Ogf
@@ -28,7 +28,7 @@ namespace Ogf
 namespace Xcb
 {
 
-class Client : public Platform::Client
+class Client : public Backend::Client
 {
 public:
     Client(Driver &d);
@@ -50,12 +50,14 @@ public:
     void set_size_limits(const Primative::Size &min,
                          const Primative::Size &max) override;
     void set_title(const std::string &t) override;
-    Platform::Painter *painter() const override;
+    void paint() override;
+    Backend::Painter *painter() const override;
 
 private:
     Driver *m_driver;
     xcb_window_t m_window;
-    std::unique_ptr<Platform::Painter> m_painter;
+    std::unique_ptr<Backend::Painter> m_painter;
+    std::unique_ptr<Gl::Context> m_gl_context;
 
     void _init_window();
     void _init_atoms();

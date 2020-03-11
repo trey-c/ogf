@@ -17,37 +17,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/font.hpp>
+#pragma once
+
+#include <ogf/gl/context.hpp>
+#include <ogf/primative/size.hpp>
+#include <string>
 
 namespace Ogf
 {
 
-namespace Platform
+namespace Backend
 {
 
-Font::Font(const std::string &f, int s) : m_family(f), m_size(s)
+class Font
 {
-}
+public:
+    Font(const std::string &f, int s);
 
-void Font::set_family(const std::string &f)
-{
-    m_family = f;
-}
+    void set_family(const std::string &f);
+    void set_size(int s);
 
-void Font::set_size(int s)
-{
-    m_size = s;
-}
+    const char *family() const;
+    const int &size() const;
 
-const char *Font::family() const
-{
-    return m_family.c_str();
-}
+    const Gl::PangoFont &gl_font() const;
 
-const int &Font::size() const
-{
-    return m_size;
-}
+private:
+    std::string m_family;
+    int m_size;
+
+    Gl::PangoFont m_gl_font;
+
+    void _init();
+};
 
 }
 

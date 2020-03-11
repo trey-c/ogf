@@ -8,7 +8,7 @@ primative_src = [
 primative_deps = []
 
 primative_lib = library('ogf-primative', sources: primative_src, dependencies: primative_deps,
-    include_directories: internal_inc)
+    include_directories: internal_inc, install: true)
 
 primative_dep = declare_dependency(link_with : primative_lib, dependencies: primative_deps,
     include_directories : internal_inc)

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <ogf/platform/driver.hpp>
+#include <ogf/backend/driver.hpp>
 #include <xcb/xcb.h>
 
 namespace Ogf
@@ -28,18 +28,18 @@ namespace Ogf
 namespace Xcb
 {
 
-class Driver : public Platform::Driver
+class Driver : public Backend::Driver
 {
 public:
     Driver();
     ~Driver();
 
+    xcb_visualtype_t *find_visual();
+
     xcb_connection_t *connection() const;
     xcb_screen_t *screen() const;
 
-    std::unique_ptr<Platform::Client> create_client() override;
-    std::unique_ptr<Platform::Painter>
-    create_painter(Platform::Client &w) override;
+    std::unique_ptr<Client> create_client(const Primative::Size &s) override;
     int main_loop() override;
 
 private:
@@ -47,7 +47,7 @@ private:
     xcb_screen_t *m_screen;
 
     void _filter_event(xcb_generic_event_t *event);
-    Platform::Client *_find_client(xcb_window_t *w);
+    Backend::Client *_find_client(xcb_window_t *w);
 };
 
 }

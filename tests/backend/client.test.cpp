@@ -17,38 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/client.hpp>
+#include <ogf/backend/client.hpp>
 
-namespace Ogf
+#include <assert.h>
+
+using namespace Ogf;
+
+int main(int argc, char **argv)
 {
-
-namespace Platform
-{
-
-Client::Client() : ignore_resize(false)
-{
-}
-
-void Client::set_size(const Primative::Size &s)
-{
-    m_size = s;
-}
-
-void Client::set_min_size(const Primative::Size &s)
-{
-    m_size = s;
-}
-
-const Primative::Size &Client::size() const
-{
-    return m_size;
-}
-
-const Primative::Size &Client::min_size() const
-{
-    return m_min_size;
-}
-
-}
-
+    return 0;
 }

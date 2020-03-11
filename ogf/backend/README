@@ -1,4 +1,4 @@
-ogf-platform:
+ogf-backend:
     - ogf/primative
     - dlg
     - nytl

@@ -37,12 +37,13 @@ public:
     virtual void remove(Widget &w);
 
     void show_all();
-    void children_on_paint(Platform::Painter &p);
+    void children_on_paint(Backend::Painter &p);
     void children_on_key_press(int k, const Primative::Point &p);
     void children_on_key_release(int k, const Primative::Point &p);
     void children_on_mouse_move(const Primative::Point &p);
     void children_on_mouse_press(int b, const Primative::Point &p);
     void children_on_mouse_release(int b, const Primative::Point &p);
+    void children_on_state_change();
 
     const std::list<Widget *> &children() const;
 

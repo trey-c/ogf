@@ -72,7 +72,7 @@ Button::Button(const std::string &t, Gui::Widget *w)
         repaint(false);
     };
 
-    /* Should be called in Label::set_text */
+    /* Should be called when Label::set_text calls repaint(true) */
     on_state_change();
 }
 

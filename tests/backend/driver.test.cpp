@@ -17,33 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#pragma once
+#include <ogf/backend/driver.hpp>
 
-#include <ogf/gl/context.hpp>
-#include <ogf/platform/font.hpp>
+#include <assert.h>
 
-namespace Ogf
+using namespace Ogf;
+
+int main(int argc, char **argv)
 {
-
-namespace Xcb
-{
-
-class Font : public Platform::Font
-{
-public:
-    Font(const std::string &f, int s);
-
-    const Gl::PangoFont &gl_font() const;
-
-    void set_family(const std::string &f) override;
-    void set_size(int s) override;
-
-private:
-    Gl::PangoFont m_gl_font;
-
-    void _update();
-};
-
-}
-
+    return 0;
 }

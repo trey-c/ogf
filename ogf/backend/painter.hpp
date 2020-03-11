@@ -17,13 +17,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/driver.hpp>
+#pragma once
 
-#include <assert.h>
+#include <memory>
+#include <ogf/backend/font.hpp>
+#include <ogf/gl/context.hpp>
+#include <ogf/primative/color.hpp>
+#include <ogf/primative/rect.hpp>
 
-using namespace Ogf;
-
-int main(int argc, char **argv)
+namespace Ogf
 {
-    return 0;
+
+namespace Backend
+{
+
+class Painter
+{
+public:
+    Painter(Gl::Context &ctx);
+
+    void color(const Primative::Color &c);
+    void rect(const Primative::Rect &r);
+    void fill();
+    void stroke();
+    void save();
+    void restore();
+    void clip();
+    void move(const Primative::Point &p);
+    void translate(const Primative::Point &p);
+    void text(const Font &f, const std::string &t);
+    std::unique_ptr<Font> create_font(const std::string &f, int s);
+    Primative::Size predict_text_size(const Font &f, const std::string &t);
+
+private:
+    Gl::Context *m_gl_context;
+};
+
+}
+
 }

@@ -9,7 +9,7 @@ widget_deps = [
 ]
 
 widget_lib = library('ogf-widget', sources: widget_src, dependencies: widget_deps,
-    include_directories: internal_inc)
+    include_directories: internal_inc, install: true)
 
 widget_dep = declare_dependency(link_with : widget_lib, dependencies: widget_deps,
     include_directories : internal_inc)

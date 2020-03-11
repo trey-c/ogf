@@ -17,42 +17,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/driver.hpp>
+#pragma once
+
+#include <list>
+#include <memory>
+#include <ogf/backend/client.hpp>
 
 namespace Ogf
 {
 
-namespace Platform
+namespace Backend
 {
 
-Driver::Driver() : m_running(true)
+class Driver
 {
-}
+public:
+    Driver();
+    virtual ~Driver() = default;
 
-void Driver::add_client(Client &c)
-{
-    m_clients.push_back(&c);
-}
+    virtual int main_loop() = 0;
+    virtual std::unique_ptr<Client> create_client(const Primative::Size &s) = 0;
 
-void Driver::remove_client(Client &c)
-{
-    m_clients.remove(&c);
-}
+    void add_client(Client &c);
+    void remove_client(Client &c);
+    void exit();
 
-void Driver::exit()
-{
-    m_running = false;
-}
+    const std::list<Client *> &clients() const;
+    const bool &running() const;
 
-const std::list<Client *> &Driver::clients() const
-{
-    return m_clients;
-}
-
-const bool &Driver::running() const
-{
-    return m_running;
-}
+private:
+    std::list<Client *> m_clients;
+    bool m_running;
+};
 
 }
 

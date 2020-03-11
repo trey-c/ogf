@@ -27,7 +27,8 @@ namespace Ogf
 namespace Gui
 {
 
-Widget::Widget(Widget *w) : m_parent(nullptr), m_visible(false)
+Widget::Widget(Widget *w)
+    : ignore_state_change(false), m_parent(nullptr), m_visible(false)
 {
     _init_size_policy();
 
@@ -41,15 +42,10 @@ Widget::Widget(Widget *w) : m_parent(nullptr), m_visible(false)
 
 void Widget::repaint(bool r)
 {
-    auto client = find_client();
-
-    if (client)
-        client->on_expose();
+    if (m_parent)
+        m_parent->repaint(r);
     else
-        dlg_warn("Widget: Cannot find client");
-
-    if (r)
-        on_state_change();
+        dlg_warn("widget: Can't repaint without parent");
 }
 
 void Widget::show()
@@ -62,7 +58,7 @@ void Widget::hide()
     m_visible = false;
 }
 
-Platform::Client *Widget::client()
+Backend::Client *Widget::client()
 {
     return nullptr;
 }
@@ -145,17 +141,20 @@ const Primative::Rect Widget::area() const
     return Primative::Rect(m_position, m_size);
 }
 
-Platform::Client *Widget::find_client()
+Backend::Client *Widget::find_client()
 {
     auto widget = &(*this);
 
     while (widget->parent() != nullptr)
         widget = widget->parent();
 
+    if (!widget->client())
+        dlg_warn("widget: Cannot find client");
+
     return widget->client();
 }
 
-void Widget::paint_style(Platform::Painter &p)
+void Widget::paint_style(Backend::Painter &p)
 {
     p.color(m_style.background_color());
     p.rect(Primative::Rect(0, 0, size().width(), size().height()));

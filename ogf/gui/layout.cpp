@@ -29,8 +29,9 @@ namespace Gui
 
 Layout::Layout(Widget *w) : Widget(w)
 {
-    on_paint += [this](Platform::Painter &p) {
+    on_paint += [this](Backend::Painter &p) {
         paint_style(p);
+
         children_on_paint(p);
     };
 
@@ -51,7 +52,12 @@ Layout::Layout(Widget *w) : Widget(w)
     };
 
     on_state_change += [this]() {
+        if (ignore_state_change)
+            return;
+
         children_allocate();
+
+        children_on_state_change();
     };
 
     on_parent_request.clear();
@@ -88,7 +94,7 @@ void Layout::show_all()
     }
 }
 
-void Layout::children_on_paint(Platform::Painter &p)
+void Layout::children_on_paint(Backend::Painter &p)
 {
     for (auto child : m_children) {
         p.save();
@@ -151,6 +157,13 @@ void Layout::children_on_mouse_release(int b, const Primative::Point &p)
     for (auto child : m_children) {
         if (child->area().contains(p))
             child->on_mouse_release(b, _child_mouse_offset(child, p));
+    }
+}
+
+void Layout::children_on_state_change()
+{
+    for (auto child : m_children) {
+        child->on_state_change();
     }
 }
 

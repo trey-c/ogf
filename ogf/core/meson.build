@@ -13,8 +13,15 @@ if host_machine.system() == 'linux'
     endif
 endif
 
+if host_machine.system() == 'windows'
+    if get_option('win32').enabled()
+        core_deps += win32_dep
+        core_args += '-DOGF_WIN32'
+    endif
+endif
+
 core_lib = library('ogf-core', sources: core_src, dependencies: core_deps,
-    include_directories: internal_inc, cpp_args: core_args)
+    include_directories: internal_inc, cpp_args: core_args, install: true)
 
 core_dep = declare_dependency(link_with : core_lib, dependencies: core_deps,
     include_directories : internal_inc, cpp_args: core_args)

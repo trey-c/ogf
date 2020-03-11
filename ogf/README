@@ -4,13 +4,15 @@ ogf:
     > cd build
     > ninja
 
-    ogf/platform:
+    ogf/backend:
         - ogf/primative
+        - ogf/gl
 
     ogf/core:
         - ogf/xcb: * Linux *
-            - ogf/platform
-            - ogf/gl
+            - ogf/backend
+        - ogf/win32: * Windows *
+            - ogf/backend
 
     ogf/gui:
         - ogf/core

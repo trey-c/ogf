@@ -20,9 +20,9 @@
 #pragma once
 
 #include <nytl/nonCopyable.hpp>
+#include <ogf/Backend/client.hpp>
 #include <ogf/core/application.hpp>
 #include <ogf/gui/style.hpp>
-#include <ogf/platform/client.hpp>
 #include <ogf/primative/point.hpp>
 #include <ogf/primative/size.hpp>
 
@@ -39,7 +39,7 @@ public:
     virtual ~Widget() = default;
 
     nytl::Callback<void()> on_state_change;
-    nytl::Callback<void(Platform::Painter &p)> on_paint;
+    nytl::Callback<void(Backend::Painter &p)> on_paint;
     nytl::Callback<void(int k, const Primative::Point &p)> on_key_press;
     nytl::Callback<void(int k, const Primative::Point &p)> on_key_release;
     nytl::Callback<void(const Primative::Point &p)> on_mouse_move;
@@ -54,11 +54,10 @@ public:
         bool horizontal_stretch;
     } size_policy;
 
-    void repaint(bool r);
-
+    virtual void repaint(bool r);
     virtual void show();
     virtual void hide();
-    virtual Platform::Client *client();
+    virtual Backend::Client *client();
 
     virtual void set_position(const Primative::Point &p);
     virtual void set_size(const Primative::Size &s);
@@ -76,19 +75,19 @@ public:
     const Primative::Size &min_size() const;
     const Primative::Rect area() const;
 
-    Platform::Client *find_client();
+    Backend::Client *find_client();
 
 protected:
+    bool ignore_state_change;
     nytl::Callback<void(Widget &w)> on_parent_request;
 
-    void paint_style(Platform::Painter &p);
+    void paint_style(Backend::Painter &p);
 
 private:
     Widget *m_parent;
     Style m_style;
     bool m_visible;
     bool m_hovered;
-    bool m_state_change;
     Primative::Point m_position;
     Primative::Size m_size;
     Primative::Size m_min_size;

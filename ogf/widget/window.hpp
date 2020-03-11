@@ -20,8 +20,8 @@
 #pragma once
 
 #include <memory>
+#include <ogf/Backend/client.hpp>
 #include <ogf/gui/layout.hpp>
-#include <ogf/platform/client.hpp>
 #include <string>
 
 namespace Ogf
@@ -43,14 +43,15 @@ public:
     void children_allocate() override;
     void show() override;
     void hide() override;
-    Platform::Client *client() override;
+    Backend::Client *client() override;
 
     void set_position(const Primative::Point &p) override;
     void set_size(const Primative::Size &s) override;
     void set_min_size(const Primative::Size &s) override;
+    void repaint(bool r) override;
 
 private:
-    std::unique_ptr<Platform::Client> m_client;
+    std::unique_ptr<Backend::Client> m_client;
     std::shared_ptr<Core::Application> m_application;
 
     void _init_client(const std::string &t);

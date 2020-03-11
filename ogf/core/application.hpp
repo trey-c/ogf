@@ -20,7 +20,7 @@
 #pragma once
 
 #include <memory>
-#include <ogf/platform/driver.hpp>
+#include <ogf/Backend/driver.hpp>
 
 namespace Ogf
 {
@@ -38,10 +38,10 @@ public:
     int exec();
     void exit();
 
-    Platform::Driver *driver() const;
+    Backend::Driver *driver() const;
 
 private:
-    std::unique_ptr<Platform::Driver> m_driver;
+    std::unique_ptr<Backend::Driver> m_driver;
 
     void _init_driver();
 };

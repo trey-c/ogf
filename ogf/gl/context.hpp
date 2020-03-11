@@ -37,18 +37,17 @@ struct PangoFont
 {
     PangoFontDescription *description;
 
-    void set_description(std::string &s);
+    void set_description(const std::string &s);
 };
 
 class Context
 {
 public:
-    Context(cairo_surface_t *s);
-    ~Context();
+    Context();
 
     Primative::Size text_ink_size(const PangoFont &f, const std::string &t);
     void text(const PangoFont &f, const std::string &t);
-    void clear();
+    void update_surface(cairo_surface_t *s);
     void flush();
     void color(const Primative::Color &c);
     void rectangle(const Primative::Rect &r);
@@ -60,13 +59,9 @@ public:
     void move_to(const Primative::Point &p);
     void translate(const Primative::Point &p);
 
-    cairo_surface_t *surface() const;
-
 private:
-    cairo_surface_t *m_surface;
     cairo_t *m_cr;
-
-    void _init_cairo();
+    cairo_surface_t *m_surface;
 };
 
 }

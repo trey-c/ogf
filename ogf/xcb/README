@@ -1,6 +1,5 @@
 ogf-xcb:
-    - ogf/platform
-    - ogf/gl
+    - ogf/backend
     - xcb
     - xcb-iccm
     - cairo-xcb

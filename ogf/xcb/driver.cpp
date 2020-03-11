@@ -22,7 +22,6 @@
 #include <dlg/dlg.hpp>
 #include <ogf/primative/size.hpp>
 #include <ogf/xcb/client.hpp>
-#include <ogf/xcb/painter.hpp>
 
 namespace Ogf
 {
@@ -39,6 +38,22 @@ Driver::Driver()
 Driver::~Driver()
 {
     xcb_disconnect(m_connection);
+}
+
+xcb_visualtype_t *Driver::find_visual()
+{
+    auto depth_iter = xcb_screen_allowed_depths_iterator(m_screen);
+
+    for (; depth_iter.rem; xcb_depth_next(&depth_iter)) {
+        auto visual_iter = xcb_depth_visuals_iterator(depth_iter.data);
+
+        for (; visual_iter.rem; xcb_visualtype_next(&visual_iter)) {
+            if (m_screen->root_visual == visual_iter.data->visual_id) {
+                return visual_iter.data;
+            }
+        }
+    }
+    return nullptr;
 }
 
 xcb_connection_t *Driver::connection() const
@@ -67,14 +82,9 @@ int Driver::main_loop()
     return 0;
 }
 
-std::unique_ptr<Platform::Client> Driver::create_client()
+std::unique_ptr<Backend::Client> Driver::create_client(const Primative::Size &s)
 {
-    return std::make_unique<Client>(*this);
-}
-
-std::unique_ptr<Platform::Painter> Driver::create_painter(Platform::Client &c)
-{
-    return std::make_unique<Painter>(static_cast<Client &>(c));
+    return std::make_unique<Client>(*this, s);
 }
 
 void Driver::_filter_event(xcb_generic_event_t *event)
@@ -89,7 +99,7 @@ void Driver::_filter_event(xcb_generic_event_t *event)
             return;
 
         xcb_flush(m_connection);
-        client->on_expose();
+        client->paint();
         break;
     }
     case XCB_KEY_PRESS: {
@@ -157,8 +167,7 @@ void Driver::_filter_event(xcb_generic_event_t *event)
         break;
     }
     case XCB_CONFIGURE_NOTIFY: {
-        xcb_configure_notify_event_t *ev =
-            (xcb_configure_notify_event_t *)event;
+        auto *ev = (xcb_configure_notify_event_t *)event;
 
         auto client = _find_client(&ev->event);
 
@@ -190,9 +199,9 @@ void Driver::_filter_event(xcb_generic_event_t *event)
     }
 }
 
-Platform::Client *Driver::_find_client(xcb_window_t *w)
+Backend::Client *Driver::_find_client(xcb_window_t *w)
 {
-    for (Platform::Client *c : clients()) {
+    for (Backend::Client *c : clients()) {
         if (static_cast<Xcb::Client *>(c)->window() == *w)
             return c;
     }

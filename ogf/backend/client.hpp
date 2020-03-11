@@ -21,23 +21,23 @@
 
 #include <memory>
 #include <nytl/callback.hpp>
-#include <ogf/platform/painter.hpp>
+#include <ogf/backend/painter.hpp>
 
 namespace Ogf
 {
 
-namespace Platform
+namespace Backend
 {
 
 class Client
 {
 public:
-    Client();
+    Client(const Primative::Size &s);
     virtual ~Client() = default;
 
     bool ignore_resize;
     nytl::Callback<void()> on_quit;
-    nytl::Callback<void()> on_expose;
+    nytl::Callback<void(Backend::Painter &p)> on_paint;
     nytl::Callback<void(const Primative::Size &s)> on_resize;
     nytl::Callback<void(int k, const Primative::Point &p)> on_key_press;
     nytl::Callback<void(int k, const Primative::Point &p)> on_key_release;
@@ -52,6 +52,7 @@ public:
     virtual void set_size_limits(const Primative::Size &min,
                                  const Primative::Size &max) = 0;
     virtual void set_title(const std::string &t) = 0;
+    virtual void paint() = 0;
     virtual Painter *painter() const = 0;
 
     void set_size(const Primative::Size &s);

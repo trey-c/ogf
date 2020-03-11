@@ -19,8 +19,8 @@
 
 #pragma once
 
+#include <ogf/Backend/font.hpp>
 #include <ogf/gui/layout.hpp>
-#include <ogf/platform/font.hpp>
 
 namespace Ogf
 {
@@ -39,9 +39,9 @@ public:
 
 private:
     std::string m_text;
-    std::unique_ptr<Platform::Font> m_font;
+    std::unique_ptr<Backend::Font> m_font;
 
-    Primative::Size _compute_min_size();
+    Primative::Size _predict_min_size();
 };
 
 }

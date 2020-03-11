@@ -25,5 +25,16 @@ using namespace Ogf;
 
 int main(int argc, char **argv)
 {
+    Gl::Context ctx;
+
+    Gl::PangoFont font;
+
+    font.set_description("Sans 11");
+
+    auto size1 = ctx.text_ink_size(font, "Test");
+    auto size2 = ctx.text_ink_size(font, "Test Longer");
+
+    assert(size1.width() < size2.width());
+
     return 0;
 }

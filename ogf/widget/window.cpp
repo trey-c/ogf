@@ -37,7 +37,7 @@ Window::Window(const std::string &t, std::shared_ptr<Core::Application> a)
     style().set_border(Primative::Color(33, 33, 33), 0, 5);
 
     on_paint.clear();
-    on_paint += [this](Platform::Painter &p) {
+    on_paint += [this](Backend::Painter &p) {
         paint_style(p);
         children_on_paint(p);
     };
@@ -97,12 +97,10 @@ void Window::children_allocate()
                                 (style().border_thickness() * 2));
 
         set_min_size(new_min_size);
-
-        child->on_state_change();
     }
 }
 
-Platform::Client *Window::client()
+Backend::Client *Window::client()
 {
     return m_client.get();
 }
@@ -126,20 +124,27 @@ void Window::set_min_size(const Primative::Size &s)
     m_client->set_size_limits(s, Primative::Size(-1, -1));
 }
 
+void Window::repaint(bool r)
+{
+    if (r) {
+        on_state_change();
+    }
+
+    m_client->paint();
+}
+
 void Window::_init_client(const std::string &t)
 {
-    m_client = m_application->driver()->create_client();
+    m_client = m_application->driver()->create_client(Primative::Size(
+        style().border_thickness(), style().border_thickness()));
 
-    m_client->on_expose += [this]() {
+    m_client->on_paint += [this](Backend::Painter &p) {
         on_paint(*m_client->painter());
     };
 
     m_client->on_resize += [this](const Primative::Size &s) {
         Layout::set_size(s);
         on_state_change();
-        m_client->painter()->begin_frame();
-        on_paint(*m_client->painter());
-        m_client->painter()->end_frame();
     };
 
     m_client->on_key_press += [this](int k, const Primative::Point &p) {
@@ -163,8 +168,6 @@ void Window::_init_client(const std::string &t)
     };
 
     m_client->set_title(t);
-    m_client->resize(Primative::Size(style().border_thickness(),
-                                     style().border_thickness()));
 }
 
 }

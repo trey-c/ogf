@@ -7,4 +7,4 @@ demo_deps = [
 ]
 
 demo = executable('demo', sources: demo_src, dependencies: demo_deps,
-    include_directories: internal_inc)
+    include_directories: internal_inc, install: true)

@@ -17,13 +17,55 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/platform/client.hpp>
+#include <ogf/backend/font.hpp>
 
-#include <assert.h>
-
-using namespace Ogf;
-
-int main(int argc, char **argv)
+namespace Ogf
 {
-    return 0;
+
+namespace Backend
+{
+
+Font::Font(const std::string &f, int s) : m_family(f), m_size(s)
+{
+    _init();
+}
+
+void Font::set_family(const std::string &f)
+{
+    m_family = f;
+
+    _init();
+}
+
+void Font::set_size(int s)
+{
+    m_size = s;
+
+    _init();
+}
+
+const char *Font::family() const
+{
+    return m_family.c_str();
+}
+
+const int &Font::size() const
+{
+    return m_size;
+}
+
+const Gl::PangoFont &Font::gl_font() const
+{
+    return m_gl_font;
+}
+
+void Font::_init()
+{
+    auto family_fix = std::string(family()) + " " + std::to_string(size());
+
+    m_gl_font.set_description(family_fix);
+}
+
+}
+
 }

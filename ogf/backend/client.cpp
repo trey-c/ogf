@@ -17,33 +17,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#pragma once
-
-#include <ogf/primative/size.hpp>
-#include <string>
+#include <ogf/backend/client.hpp>
 
 namespace Ogf
 {
 
-namespace Platform
+namespace Backend
 {
 
-class Font
+Client::Client(const Primative::Size &s) : ignore_resize(false)
 {
-public:
-    Font(const std::string &f, int s);
-    virtual ~Font() = default;
+}
 
-    virtual void set_family(const std::string &f);
-    virtual void set_size(int s);
+void Client::set_size(const Primative::Size &s)
+{
+    m_size = s;
+}
 
-    const char *family() const;
-    const int &size() const;
+void Client::set_min_size(const Primative::Size &s)
+{
+    m_min_size = s;
+}
 
-private:
-    std::string m_family;
-    int m_size;
-};
+const Primative::Size &Client::size() const
+{
+    return m_size;
+}
+
+const Primative::Size &Client::min_size() const
+{
+    return m_min_size;
+}
 
 }
 

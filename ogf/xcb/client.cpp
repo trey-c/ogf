@@ -19,7 +19,7 @@
 
 #include <ogf/xcb/client.hpp>
 
-#include <ogf/xcb/painter.hpp>
+#include <ogf/backend/painter.hpp>
 #include <string.h>
 #include <xcb/xcb_icccm.h>
 
@@ -33,9 +33,10 @@ Client::Client(Driver &d) : m_driver(&d)
 {
     m_driver->add_client(*this);
 
-    _init_window();
+    m_gl_context = std::make_unique<Gl::Context>();
+    m_painter = std::make_unique<Backend::Painter>(*m_gl_context.get());
 
-    m_painter = m_driver->create_painter(*this);
+    _init_window();
 }
 
 Client::~Client()
@@ -125,6 +126,22 @@ void Client::set_title(const std::string &t)
     xcb_flush(m_driver->connection());
 }
 
+void Client::paint()
+{
+    gl_context()->update_surface(cairo_xcb_surface_create(
+        m_driver()->connection(), m_window, m_driver->find_visual(),
+        size().width(), size().height()));
+
+    on_paint(*m_painter.get());
+
+    gl_context()->flush();
+}
+
+Backend::Painter *Client::painter() const
+{
+    return m_painter.get();
+}
+
 void Client::_init_window()
 {
     int mask = 0;
@@ -167,11 +184,6 @@ void Client::_init_atoms()
     xcb_change_property(m_driver->connection(), XCB_PROP_MODE_REPLACE, m_window,
                         (*atoms.wm_protocols).atom, 4, 32, 1,
                         &(*atoms.wm_delete_window).atom);
-}
-
-Platform::Painter *Client::painter() const
-{
-    return m_painter.get();
 }
 
 }

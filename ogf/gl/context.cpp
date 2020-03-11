@@ -19,6 +19,7 @@
 
 #include <ogf/gl/context.hpp>
 
+#include <dlg/dlg.hpp>
 #include <glib.h>
 
 namespace Ogf
@@ -27,24 +28,26 @@ namespace Ogf
 namespace Gl
 {
 
-Context::Context(cairo_surface_t *s) : m_surface(s)
+Context::Context() : m_cr(nullptr), m_surface(nullptr)
 {
-    _init_cairo();
 }
 
-Context::~Context()
-{
-    cairo_destroy(m_cr);
-    cairo_surface_destroy(m_surface);
-}
-
-void PangoFont::set_description(std::string &s)
+void PangoFont::set_description(const std::string &s)
 {
     description = pango_font_description_from_string(s.c_str());
 }
 
 Primative::Size Context::text_ink_size(const PangoFont &f, const std::string &t)
 {
+    cairo_surface_t *temp = nullptr;
+
+    if (!m_cr) {
+        dlg_warn("gl: cairo context null");
+
+        temp = cairo_image_surface_create(CAIRO_FORMAT_RGB24, 100, 100);
+        update_surface(temp);
+    }
+
     auto layout = pango_cairo_create_layout(m_cr);
     PangoRectangle ink, logical;
 
@@ -53,6 +56,10 @@ Primative::Size Context::text_ink_size(const PangoFont &f, const std::string &t)
     pango_layout_get_pixel_extents(layout, &ink, &logical);
 
     g_object_unref(layout);
+
+    if (temp)
+        flush();
+
     return Primative::Size(ink.width, ink.height);
 }
 
@@ -69,23 +76,21 @@ void Context::text(const PangoFont &f, const std::string &t)
     g_object_unref(layout);
 }
 
-void Context::clear()
+void Context::update_surface(cairo_surface_t *s)
 {
-    cairo_new_path(m_cr);
-
-    cairo_save(m_cr);
-
-    cairo_set_operator(m_cr, CAIRO_OPERATOR_CLEAR);
-    cairo_paint(m_cr);
-
-    color(Primative::Color(0, 0, 0));
-    cairo_set_operator(m_cr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(m_cr);
+    m_cr = cairo_create(s);
+    m_surface = s;
 }
 
 void Context::flush()
 {
     cairo_surface_flush(m_surface);
+
+    cairo_destroy(m_cr);
+    cairo_surface_destroy(m_surface);
+
+    m_cr = nullptr;
+    m_surface = nullptr;
 }
 
 void Context::color(const Primative::Color &c)
@@ -134,16 +139,6 @@ void Context::move_to(const Primative::Point &p)
 void Context::translate(const Primative::Point &p)
 {
     cairo_translate(m_cr, p.x(), p.y());
-}
-
-cairo_surface_t *Context::surface() const
-{
-    return m_surface;
-}
-
-void Context::_init_cairo()
-{
-    m_cr = cairo_create(m_surface);
 }
 
 }

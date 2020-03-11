@@ -23,6 +23,10 @@
 #include <ogf/xcb/driver.hpp>
 #endif
 
+#ifdef OGF_WIN32
+#include <ogf/win32/driver.hpp>
+#endif
+
 namespace Ogf
 {
 
@@ -49,7 +53,7 @@ void Application::exit()
     m_driver->exit();
 }
 
-Platform::Driver *Application::driver() const
+Backend::Driver *Application::driver() const
 {
     return m_driver.get();
 }
@@ -58,6 +62,10 @@ void Application::_init_driver()
 {
 #ifdef OGF_XCB
     m_driver = std::make_unique<Xcb::Driver>();
+#endif
+
+#ifdef OGF_WIN32
+    m_driver = std::make_unique<Win32::Driver>();
 #endif
 }
 
