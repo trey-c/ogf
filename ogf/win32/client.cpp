@@ -72,17 +72,17 @@ void Client::unmap()
 
 void Client::move(const Primative::Point &p)
 {
-    SetWindowPos(window, 0, p.x(), p.y(), 0, 0,
+    SetWindowPos(window, 0, p.x, p.y, 0, 0,
                  SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 }
 
 void Client::resize(const Primative::Size &s)
 {
-    if (size() == s)
+    if (size == s)
         return;
 
     ignore_resize = true;
-    SetWindowPos(window, 0, 0, 0, s.width(), s.height(),
+    SetWindowPos(window, 0, 0, 0, s.width, s.height,
                  SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
     ignore_resize = false;
 }
@@ -90,7 +90,7 @@ void Client::resize(const Primative::Size &s)
 void Client::set_size_limits(const Primative::Size &min,
                              const Primative::Size &max)
 {
-    set_min_size(min);
+    min_size = min;
 }
 
 void Client::set_title(const std::string &t)
@@ -127,7 +127,7 @@ void Client::_init_window(const Primative::Size &s)
     RegisterClass(&window_class);
 
     window = CreateWindowEx(0, TEXT("window"), nullptr, WS_OVERLAPPEDWINDOW,
-                            CW_USEDEFAULT, CW_USEDEFAULT, s.width(), s.height(),
+                            CW_USEDEFAULT, CW_USEDEFAULT, s.width, s.height,
                             nullptr, nullptr, m_driver->instance(), nullptr);
 
     SetWindowLongPtr(window, GWLP_USERDATA, (LONG_PTR)this);
@@ -153,8 +153,8 @@ LRESULT CALLBACK Client::_window_proc(HWND win, UINT msg, WPARAM wp, LPARAM lp)
         Primative::Size new_size(result.right - result.left,
                                  result.bottom - result.top);
 
-        if (client && new_size != client->size()) {
-            client->set_size(new_size);
+        if (client && new_size != client->size {
+            client->size = new_size;
             client->on_resize(new_size);
         }
 
@@ -245,8 +245,8 @@ LRESULT CALLBACK Client::_window_proc(HWND win, UINT msg, WPARAM wp, LPARAM lp)
         LPMINMAXINFO min_max_info = (LPMINMAXINFO)lp;
 
         if (client) {
-            min_max_info->ptMinTrackSize.x = client->min_size().width() * 2;
-            min_max_info->ptMinTrackSize.y = client->min_size().height() * 2;
+            min_max_info->ptMinTrackSize.x = client->min_size.width * 2;
+            min_max_info->ptMinTrackSize.y = client->min_size.height * 2;
         }
 
         break;

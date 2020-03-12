@@ -27,26 +27,18 @@ namespace Ogf
 namespace Primative
 {
 
-class Size
+struct Size
 {
-public:
     Size();
     Size(int w, int h);
 
-    void set_width(int w);
-    void set_height(int h);
-
-    const int &width() const;
-    const int &height() const;
-
-    bool operator==(const Size &s) const;
-    bool operator!=(const Size &s) const;
+    int width;
+    int height;
 
     const std::string to_string() const;
 
-private:
-    int m_width;
-    int m_height;
+    bool operator==(const Size &s) const;
+    bool operator!=(const Size &s) const;
 };
 
 }

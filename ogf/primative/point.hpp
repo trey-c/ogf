@@ -27,26 +27,18 @@ namespace Ogf
 namespace Primative
 {
 
-class Point
+struct Point
 {
-public:
     Point();
     Point(int x, int y);
 
-    void set_x(int x);
-    void set_y(int y);
-
-    const int &x() const;
-    const int &y() const;
-
-    bool operator==(const Point &p) const;
-    bool operator!=(const Point &p) const;
+    int x;
+    int y;
 
     const std::string to_string() const;
 
-private:
-    int m_x;
-    int m_y;
+    bool operator==(const Point &p) const;
+    bool operator!=(const Point &p) const;
 };
 
 }

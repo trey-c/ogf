@@ -20,7 +20,7 @@
 #pragma once
 
 #include <nytl/nonCopyable.hpp>
-#include <ogf/Backend/client.hpp>
+#include <ogf/backend/client.hpp>
 #include <ogf/core/application.hpp>
 #include <ogf/gui/style.hpp>
 #include <ogf/primative/point.hpp>
@@ -37,6 +37,10 @@ class Widget : public nytl::NonCopyable
 public:
     Widget(Widget *w);
     virtual ~Widget() = default;
+
+    Primative::Point position;
+    Primative::Size size;
+    Primative::Size min_size;
 
     nytl::Callback<void()> on_state_change;
     nytl::Callback<void(Backend::Painter &p)> on_paint;
@@ -59,20 +63,15 @@ public:
     virtual void hide();
     virtual Backend::Client *client();
 
-    virtual void set_position(const Primative::Point &p);
-    virtual void set_size(const Primative::Size &s);
-    virtual void set_min_size(const Primative::Size &s);
     void set_parent(Widget &w);
     void set_style(const Style &s);
     void set_hovered(bool h);
+    void set_size_easy(const Primative::Size &s);
 
     Widget *parent() const;
     Style &style();
     const bool &visible() const;
     const bool &hovered() const;
-    const Primative::Point &position() const;
-    const Primative::Size &size() const;
-    const Primative::Size &min_size() const;
     const Primative::Rect area() const;
 
     Backend::Client *find_client();
@@ -88,9 +87,6 @@ private:
     Style m_style;
     bool m_visible;
     bool m_hovered;
-    Primative::Point m_position;
-    Primative::Size m_size;
-    Primative::Size m_min_size;
 
     void _init_size_policy();
 };

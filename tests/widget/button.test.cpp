@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     auto button1 = Widget::Button("Test", nullptr);
     auto button2 = Widget::Button("Test 2", nullptr);
 
-    assert(button1.min_size().width() < button2.min_size().width());
+    assert(button1.min_size.width < button2.min_size.width);
 
     return 0;
 }

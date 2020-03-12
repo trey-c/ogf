@@ -20,7 +20,7 @@
 #pragma once
 
 #include <memory>
-#include <ogf/Backend/driver.hpp>
+#include <ogf/backend/driver.hpp>
 
 namespace Ogf
 {

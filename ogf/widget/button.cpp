@@ -83,16 +83,16 @@ Label &Button::label()
 
 void Button::children_allocate()
 {
-    m_label.set_position(Primative::Point(0, 0));
-    m_label.set_size(size());
+    m_label.position = Primative::Point(0, 0);
+    m_label.set_size_easy(size);
 
     Primative::Size new_min_size;
-    new_min_size.set_width(m_label.min_size().width() +
-                           (style().border_thickness() * 2));
-    new_min_size.set_height(m_label.min_size().height() +
-                            (style().border_thickness() * 2));
+    new_min_size.width =
+        m_label.min_size.width + style().border_thickness() * 2;
+    new_min_size.height =
+        m_label.min_size.height + style().border_thickness() * 2;
 
-    set_min_size(new_min_size);
+    min_size = new_min_size;
 }
 
 }

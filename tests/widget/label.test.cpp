@@ -28,11 +28,11 @@ int main(int argc, char **argv)
     auto label1 = Widget::Label("Test", nullptr);
     auto label2 = Widget::Label("Test 2", nullptr);
 
-    assert(label1.min_size().width() < label2.min_size().width());
+    assert(label1.min_size.width < label2.min_size.width);
 
     label1.set_text("Test Change");
 
-    assert(label1.min_size().width() > label2.min_size().width());
+    assert(label1.min_size.width > label2.min_size.width);
 
     return 0;
 }

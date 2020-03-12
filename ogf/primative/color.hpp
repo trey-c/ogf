@@ -28,32 +28,20 @@ namespace Ogf
 namespace Primative
 {
 
-class Color
+struct Color
 {
-public:
     Color();
     Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
 
-    void set_r(uint8_t r);
-    void set_g(uint8_t g);
-    void set_b(uint8_t b);
-    void set_a(uint8_t a);
-
-    const uint8_t &r() const;
-    const uint8_t &g() const;
-    const uint8_t &b() const;
-    const uint8_t &a() const;
-
-    bool operator==(const Color &c) const;
-    bool operator!=(const Color &c) const;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
 
     const std::string to_string() const;
 
-private:
-    uint8_t m_r;
-    uint8_t m_g;
-    uint8_t m_b;
-    uint8_t m_a;
+    bool operator==(const Color &c) const;
+    bool operator!=(const Color &c) const;
 };
 
 }

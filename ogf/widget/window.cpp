@@ -81,20 +81,19 @@ void Window::children_allocate()
     Primative::Size new_min_size;
 
     for (auto child : children()) {
-        child_position.set_x(style().border_thickness());
-        child_position.set_y(style().border_thickness());
+        child_position.x = style().border_thickness();
+        child_position.y = style().border_thickness();
 
-        child_size.set_width(size().width() - (style().border_thickness() * 2));
-        child_size.set_height(size().height() -
-                              (style().border_thickness() * 2));
+        child_size.width = size.width - (style().border_thickness() * 2);
+        child_size.height = size.height - (style().border_thickness() * 2);
 
-        child->set_position(child_position);
-        child->set_size(child_size);
+        child->position = child_position;
+        child->set_size_easy(child_size);
 
-        new_min_size.set_width(child->min_size().width() +
-                               (style().border_thickness() * 2));
-        new_min_size.set_height(child->min_size().height() +
-                                (style().border_thickness() * 2));
+        new_min_size.width =
+            child->min_size.width + (style().border_thickness() * 2);
+        new_min_size.height =
+            child->min_size.height + (style().border_thickness() * 2);
 
         set_min_size(new_min_size);
     }
@@ -117,10 +116,11 @@ void Window::set_size(const Primative::Size &s)
 
 void Window::set_min_size(const Primative::Size &s)
 {
-    if (min_size() == s)
+    if (min_size == s)
         return;
 
-    Layout::set_min_size(s);
+    min_size = s;
+
     m_client->set_size_limits(s, Primative::Size(-1, -1));
 }
 
@@ -143,7 +143,8 @@ void Window::_init_client(const std::string &t)
     };
 
     m_client->on_resize += [this](const Primative::Size &s) {
-        Layout::set_size(s);
+        size = s;
+
         on_state_change();
     };
 

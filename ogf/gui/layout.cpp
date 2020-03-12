@@ -98,10 +98,9 @@ void Layout::children_on_paint(Backend::Painter &p)
 {
     for (auto child : m_children) {
         p.save();
-        p.translate(child->position());
+        p.translate(child->position);
 
-        p.rect(Primative::Rect(0, 0, child->size().width(),
-                               child->size().height()));
+        p.rect(Primative::Rect(0, 0, child->size.width, child->size.height));
         p.clip();
 
         child->on_paint(p);
@@ -179,8 +178,7 @@ void Layout::children_allocate()
 Primative::Point Layout::_child_mouse_offset(const Widget *w,
                                              const Primative::Point &p)
 {
-    return Primative::Point(p.x() - w->position().x(),
-                            p.y() - w->position().y());
+    return Primative::Point(p.x - w->position.x, p.y - w->position.y);
 }
 
 }

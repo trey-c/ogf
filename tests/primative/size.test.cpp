@@ -27,14 +27,8 @@ int main(int argc, char **argv)
 {
     Primative::Size size(9, 4);
 
-    assert(size.width() == 9);
-    assert(size.height() == 4);
-
-    size.set_width(1);
-    size.set_height(2);
-
-    assert(size.width() == 1);
-    assert(size.height() == 2);
+    assert(size.width == 9);
+    assert(size.height == 4);
 
     Primative::Size size1;
     Primative::Size size2;
@@ -42,7 +36,7 @@ int main(int argc, char **argv)
     assert((size1 == size2) == true);
     assert((size1 != size2) == false);
 
-    size1.set_width(90);
+    size1.width = 90;
 
     assert((size1 == size2) == false);
     assert((size1 != size2) == true);

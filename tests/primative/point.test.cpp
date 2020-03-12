@@ -27,14 +27,8 @@ int main(int argc, char **argv)
 {
     Primative::Point point(3, 5);
 
-    assert(point.x() == 3);
-    assert(point.y() == 5);
-
-    point.set_x(1);
-    point.set_y(2);
-
-    assert(point.x() == 1);
-    assert(point.y() == 2);
+    assert(point.x == 3);
+    assert(point.y == 5);
 
     Primative::Point point1;
     Primative::Point point2;
@@ -42,7 +36,7 @@ int main(int argc, char **argv)
     assert((point1 == point2) == true);
     assert((point1 != point2) == false);
 
-    point1.set_x(27);
+    point1.x = 27;
 
     assert((point1 == point2) == false);
     assert((point1 != point2) == true);

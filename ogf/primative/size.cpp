@@ -25,48 +25,28 @@ namespace Ogf
 namespace Primative
 {
 
-Size::Size() : m_width(0), m_height(0)
+Size::Size() : width(0), height(0)
 {
 }
 
-Size::Size(int w, int h) : m_width(w), m_height(h)
+Size::Size(int w, int h) : width(w), height(h)
 {
-}
-
-void Size::set_width(int w)
-{
-    m_width = w;
-}
-
-void Size::set_height(int h)
-{
-    m_height = h;
-}
-
-const int &Size::width() const
-{
-    return m_width;
-}
-
-const int &Size::height() const
-{
-    return m_height;
 }
 
 bool Size::operator==(const Size &s) const
 {
-    return (width() == s.width() && height() == s.height());
+    return (width == s.width && height == s.height);
 }
 
 bool Size::operator!=(const Size &s) const
 {
-    return (width() != s.width() || height() != s.height());
+    return (width != s.width || height != s.height);
 }
 
 const std::string Size::to_string() const
 {
-    return "Size(width: " + std::to_string(width()) +
-           ", height: " + std::to_string(height()) + ")";
+    return "Size(width: " + std::to_string(width) +
+           ", height: " + std::to_string(height) + ")";
 }
 
 }

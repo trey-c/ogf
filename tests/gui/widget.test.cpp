@@ -37,12 +37,5 @@ int main(int argc, char **argv)
     widget.hide();
     assert(!widget.visible());
 
-    widget.set_position(Primative::Point(2, 7));
-    assert(widget.position() == Primative::Point(2, 7));
-    widget.set_size(Primative::Size(40, 10));
-    assert(widget.size() == Primative::Size(40, 10));
-    widget.set_min_size(Primative::Size(5, 5));
-    assert(widget.min_size() == Primative::Size(5, 5));
-
     return 0;
 }

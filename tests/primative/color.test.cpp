@@ -27,20 +27,10 @@ int main(int argc, char **argv)
 {
     Primative::Color color(55, 155, 205);
 
-    assert(color.r() == 55);
-    assert(color.g() == 155);
-    assert(color.b() == 205);
-    assert(color.a() == 255);
-
-    color.set_r(1);
-    color.set_g(2);
-    color.set_b(3);
-    color.set_a(4);
-
-    assert(color.r() == 1);
-    assert(color.g() == 2);
-    assert(color.b() == 3);
-    assert(color.a() == 4);
+    assert(color.r == 55);
+    assert(color.g == 155);
+    assert(color.b == 205);
+    assert(color.a == 255);
 
     Primative::Color color1;
     Primative::Color color2;
@@ -48,7 +38,7 @@ int main(int argc, char **argv)
     assert((color1 == color2) == true);
     assert((color1 != color2) == false);
 
-    color1.set_r(33);
+    color1.r = 33;
 
     assert((color1 == color2) == false);
     assert((color1 != color2) == true);

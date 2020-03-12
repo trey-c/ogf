@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     assert((rect1 == rect2) == true);
     assert((rect1 != rect2) == false);
 
-    rect1.set_x(2);
+    rect1.x = 2;
 
     assert((rect1 == rect2) == false);
     assert((rect1 != rect2) == true);

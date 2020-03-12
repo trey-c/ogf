@@ -95,15 +95,15 @@ void Context::flush()
 
 void Context::color(const Primative::Color &c)
 {
-    cairo_set_source_rgba(m_cr, (static_cast<double>(c.r()) / 256),
-                          (static_cast<double>(c.g()) / 256),
-                          (static_cast<double>(c.b()) / 256),
-                          (static_cast<double>(c.a()) / 256));
+    cairo_set_source_rgba(m_cr, (static_cast<double>(c.r) / 256),
+                          (static_cast<double>(c.g) / 256),
+                          (static_cast<double>(c.b) / 256),
+                          (static_cast<double>(c.a) / 256));
 }
 
 void Context::rectangle(const Primative::Rect &r)
 {
-    cairo_rectangle(m_cr, r.x(), r.y(), r.width(), r.height());
+    cairo_rectangle(m_cr, r.x, r.y, r.width, r.height);
 }
 
 void Context::fill()
@@ -133,12 +133,12 @@ void Context::clip()
 
 void Context::move_to(const Primative::Point &p)
 {
-    cairo_move_to(m_cr, p.x(), p.y());
+    cairo_move_to(m_cr, p.x, p.y);
 }
 
 void Context::translate(const Primative::Point &p)
 {
-    cairo_translate(m_cr, p.x(), p.y());
+    cairo_translate(m_cr, p.x, p.y);
 }
 
 }

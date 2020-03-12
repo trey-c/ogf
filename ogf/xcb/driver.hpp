@@ -39,7 +39,8 @@ public:
     xcb_connection_t *connection() const;
     xcb_screen_t *screen() const;
 
-    std::unique_ptr<Client> create_client(const Primative::Size &s) override;
+    std::unique_ptr<Backend::Client>
+    create_client(const Primative::Size &s) override;
     int main_loop() override;
 
 private:

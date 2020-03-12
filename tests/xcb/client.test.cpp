@@ -27,12 +27,13 @@ int main(int argc, char **argv)
 {
     Xcb::Driver driver;
 
-    auto client = driver.create_client();
+    auto client = driver.create_client(Primative::Size(640, 480));
 
     auto font = client->painter()->create_font("Sans Bold", 11);
 
     client->on_paint += [&](Backend::Painter &p) {
-        client->painter()->rect(Primative::Rect(0, 0, s.width(), s.height()));
+        client->painter()->rect(
+            Primative::Rect(0, 0, client->size.width, client->size.height));
         client->painter()->color(Primative::Color(33, 33, 33));
         client->painter()->fill();
         client->painter()->color(Primative::Color(255, 255, 255));
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
         driver.exit();
     };
 
-    client->on_quit();
+    // client->on_quit();
 
     return driver.main_loop();
 }

@@ -31,7 +31,7 @@ namespace Xcb
 class Client : public Backend::Client
 {
 public:
-    Client(Driver &d);
+    Client(Driver &d, const Primative::Size &s);
     ~Client();
 
     struct

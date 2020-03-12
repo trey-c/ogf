@@ -20,7 +20,7 @@
 #pragma once
 
 #include <memory>
-#include <ogf/Backend/client.hpp>
+#include <ogf/backend/client.hpp>
 #include <ogf/gui/layout.hpp>
 #include <string>
 
@@ -45,9 +45,9 @@ public:
     void hide() override;
     Backend::Client *client() override;
 
-    void set_position(const Primative::Point &p) override;
-    void set_size(const Primative::Size &s) override;
-    void set_min_size(const Primative::Size &s) override;
+    void set_position(const Primative::Point &p);
+    void set_size(const Primative::Size &s);
+    void set_min_size(const Primative::Size &s);
     void repaint(bool r) override;
 
 private:

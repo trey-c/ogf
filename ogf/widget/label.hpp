@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <ogf/Backend/font.hpp>
+#include <ogf/backend/font.hpp>
 #include <ogf/gui/layout.hpp>
 
 namespace Ogf

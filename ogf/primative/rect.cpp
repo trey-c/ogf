@@ -25,41 +25,39 @@ namespace Ogf
 namespace Primative
 {
 
-Rect::Rect() : Point(0, 0), Size(0, 0)
+Rect::Rect() : x(0), y(0), width(0), height(0)
 {
 }
 
-Rect::Rect(int x, int y, int w, int h) : Point(x, y), Size(w, h)
+Rect::Rect(int x, int y, int w, int h) : x(x), y(y), width(w), height(h)
 {
 }
 
-Rect::Rect(const Point &p, const Size &s) : Point(p), Size(s)
+Rect::Rect(const Point &p, const Size &s)
+    : x(p.x), y(p.y), width(s.width), height(s.height)
 {
 }
 
 bool Rect::contains(const Point &p) const
 {
-    return (p.x() >= x() && p.x() < x() + width() && p.y() >= y() &&
-            p.y() < y() + height());
+    return (p.x >= x && p.x < x + width && p.y >= y && p.y < y + height);
 }
 
 bool Rect::operator==(const Rect &r) const
 {
-    return (x() == r.x() && y() == r.y() && width() == r.width() &&
-            height() == r.height());
+    return (x == r.x && y == r.y && width == r.width && height == r.height);
 }
 
 bool Rect::operator!=(const Rect &r) const
 {
-    return (x() != r.x() || y() != r.y() || width() != r.width() ||
-            height() != r.height());
+    return (x != r.x || y != r.y || width != r.width || height != r.height);
 }
 
 const std::string Rect::to_string() const
 {
-    return "Rect(x: " + std::to_string(x()) + ", y: " + std::to_string(y()) +
-           ", width: " + std::to_string(width()) +
-           ", height: " + std::to_string(height()) + ")";
+    return "Rect(x: " + std::to_string(x) + ", y: " + std::to_string(y) +
+           ", width: " + std::to_string(width) +
+           ", height: " + std::to_string(height) + ")";
 }
 
 }

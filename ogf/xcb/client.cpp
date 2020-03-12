@@ -19,6 +19,7 @@
 
 #include <ogf/xcb/client.hpp>
 
+#include <cairo-xcb.h>
 #include <ogf/backend/painter.hpp>
 #include <string.h>
 #include <xcb/xcb_icccm.h>
@@ -29,7 +30,8 @@ namespace Ogf
 namespace Xcb
 {
 
-Client::Client(Driver &d) : m_driver(&d)
+Client::Client(Driver &d, const Primative::Size &s)
+    : Backend::Client(s), m_driver(&d)
 {
     m_driver->add_client(*this);
 
@@ -71,7 +73,7 @@ void Client::unmap()
 void Client::move(const Primative::Point &p)
 {
     int flags = XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y;
-    int values[] = {p.x(), p.y()};
+    int values[] = {p.x, p.y};
 
     xcb_configure_window(m_driver->connection(), m_window, flags, values);
 
@@ -80,11 +82,11 @@ void Client::move(const Primative::Point &p)
 
 void Client::resize(const Primative::Size &s)
 {
-    if (size() == s)
+    if (size == s)
         return;
 
     int flags = XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT;
-    int values[] = {s.width(), s.height()};
+    int values[] = {s.width, s.height};
 
     ignore_resize = true;
     xcb_configure_window(m_driver->connection(), m_window, flags, values);
@@ -98,22 +100,24 @@ void Client::set_size_limits(const Primative::Size &min,
 {
     xcb_size_hints_t hints;
 
-    if (min.width() >= 0 || min.height() >= 0) {
-        set_min_size(min);
+    if (min.width >= 0 || min.height >= 0) {
+        min_size.width = min.width;
+        min_size.height = min.height;
 
         xcb_icccm_size_hints_set_min_size(&hints,
-                                          static_cast<int16_t>(min.width()),
-                                          static_cast<int16_t>(min.height()));
+                                          static_cast<int16_t>(min.width),
+                                          static_cast<int16_t>(min.height));
     }
 
-    if (max.width() >= 0 || max.height() >= 0) {
+    if (max.width >= 0 || max.height >= 0) {
         xcb_icccm_size_hints_set_max_size(&hints,
-                                          static_cast<int16_t>(max.width()),
-                                          static_cast<int16_t>(max.height()));
+                                          static_cast<int16_t>(max.width),
+                                          static_cast<int16_t>(max.height));
     }
 
-    xcb_icccm_set_wm_size_hints(m_driver->connection(), m_window,
-                                XCB_ATOM_WM_NORMAL_HINTS, &hints);
+    /* I don't know why but the display server loves to crash here */
+    // xcb_icccm_set_wm_size_hints(m_driver->connection(), m_window,
+    //                             XCB_ATOM_WM_NORMAL_HINTS, &hints);
 
     xcb_flush(m_driver->connection());
 }
@@ -128,13 +132,14 @@ void Client::set_title(const std::string &t)
 
 void Client::paint()
 {
-    gl_context()->update_surface(cairo_xcb_surface_create(
-        m_driver()->connection(), m_window, m_driver->find_visual(),
-        size().width(), size().height()));
+    m_gl_context->update_surface(cairo_xcb_surface_create(
+        m_driver->connection(), m_window, m_driver->find_visual(), size.width,
+        size.height));
 
     on_paint(*m_painter.get());
 
-    gl_context()->flush();
+    m_gl_context->flush();
+    xcb_flush(m_driver->connection());
 }
 
 Backend::Painter *Client::painter() const
@@ -165,7 +170,8 @@ void Client::_init_window()
 
     _init_atoms();
 
-    set_size(Primative::Size(100, 100));
+    size.width = 100;
+    size.height = 100;
 }
 
 void Client::_init_atoms()

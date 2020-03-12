@@ -175,7 +175,7 @@ void Driver::_filter_event(xcb_generic_event_t *event)
             return;
 
         Primative::Size size(ev->width, ev->height);
-        client->set_size(size);
+        client->size = size;
         client->on_resize(size);
         break;
     }

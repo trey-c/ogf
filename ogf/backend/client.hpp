@@ -36,6 +36,9 @@ public:
     virtual ~Client() = default;
 
     bool ignore_resize;
+    Primative::Size size;
+    Primative::Size min_size;
+
     nytl::Callback<void()> on_quit;
     nytl::Callback<void(Backend::Painter &p)> on_paint;
     nytl::Callback<void(const Primative::Size &s)> on_resize;
@@ -54,16 +57,6 @@ public:
     virtual void set_title(const std::string &t) = 0;
     virtual void paint() = 0;
     virtual Painter *painter() const = 0;
-
-    void set_size(const Primative::Size &s);
-    void set_min_size(const Primative::Size &s);
-
-    const Primative::Size &size() const;
-    const Primative::Size &min_size() const;
-
-private:
-    Primative::Size m_size;
-    Primative::Size m_min_size;
 };
 
 }

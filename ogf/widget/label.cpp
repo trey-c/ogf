@@ -38,10 +38,8 @@ Label::Label(const std::string &t, Gui::Widget *w) : Widget(w)
     on_paint = [this](Backend::Painter &p) {
         Primative::Point text_position;
 
-        text_position.set_x((position().x() + size().width() / 2) -
-                            (min_size().width() / 2));
-        text_position.set_y((position().y() + size().height() / 2) -
-                            (min_size().height()));
+        text_position.x = (position.x + size.width / 2) - (min_size.width / 2);
+        text_position.y = (position.y + size.height / 2) - (min_size.height);
 
         p.color(style().font_color());
         p.move(text_position);
@@ -52,7 +50,8 @@ Label::Label(const std::string &t, Gui::Widget *w) : Widget(w)
 void Label::set_text(const std::string &t)
 {
     m_text = t;
-    set_min_size(_predict_min_size());
+    min_size = _predict_min_size();
+
     repaint(true);
 }
 

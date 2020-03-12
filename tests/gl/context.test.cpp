@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     auto size1 = ctx.text_ink_size(font, "Test");
     auto size2 = ctx.text_ink_size(font, "Test Longer");
 
-    assert(size1.width() < size2.width());
+    assert(size1.width < size2.width);
 
     return 0;
 }

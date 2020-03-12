@@ -25,28 +25,8 @@ namespace Ogf
 namespace Backend
 {
 
-Client::Client(const Primative::Size &s) : ignore_resize(false)
+Client::Client(const Primative::Size &s) : ignore_resize(false), size(s)
 {
-}
-
-void Client::set_size(const Primative::Size &s)
-{
-    m_size = s;
-}
-
-void Client::set_min_size(const Primative::Size &s)
-{
-    m_min_size = s;
-}
-
-const Primative::Size &Client::size() const
-{
-    return m_size;
-}
-
-const Primative::Size &Client::min_size() const
-{
-    return m_min_size;
 }
 
 }

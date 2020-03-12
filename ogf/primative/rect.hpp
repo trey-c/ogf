@@ -28,19 +28,22 @@ namespace Ogf
 namespace Primative
 {
 
-class Rect : public Point, public Size
+struct Rect
 {
-public:
     Rect();
     Rect(int x, int y, int w, int h);
     Rect(const Point &p, const Size &s);
 
+    int x;
+    int y;
+    int width;
+    int height;
+
     bool contains(const Point &p) const;
+    const std::string to_string() const;
 
     bool operator==(const Rect &r) const;
     bool operator!=(const Rect &r) const;
-
-    const std::string to_string() const;
 };
 
 }

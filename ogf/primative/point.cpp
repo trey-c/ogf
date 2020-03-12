@@ -25,48 +25,27 @@ namespace Ogf
 namespace Primative
 {
 
-Point::Point() : m_x(0), m_y(0)
+Point::Point() : x(0), y(0)
 {
 }
 
-Point::Point(int x, int y) : m_x(x), m_y(y)
+Point::Point(int x, int y) : x(x), y(y)
 {
-}
-
-void Point::set_x(int x)
-{
-    m_x = x;
-}
-
-void Point::set_y(int y)
-{
-    m_y = y;
-}
-
-const int &Point::x() const
-{
-    return m_x;
-}
-
-const int &Point::y() const
-{
-    return m_y;
 }
 
 bool Point::operator==(const Point &p) const
 {
-    return (x() == p.x() && y() == p.y());
+    return (x == p.x && y == p.y);
 }
 
 bool Point::operator!=(const Point &p) const
 {
-    return (x() != p.x() || y() != p.y());
+    return (x != p.x || y != p.y);
 }
 
 const std::string Point::to_string() const
 {
-    return "Point(x: " + std::to_string(x()) + ", y: " + std::to_string(y()) +
-           ")";
+    return "Point(x: " + std::to_string(x) + ", y: " + std::to_string(y) + ")";
 }
 
 }
