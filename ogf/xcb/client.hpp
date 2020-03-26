@@ -40,6 +40,8 @@ public:
         xcb_intern_atom_reply_t *wm_delete_window;
     } atoms;
 
+    void update_geometry();
+
     const xcb_window_t &window() const;
     const Driver *driver() const;
 
@@ -49,6 +51,7 @@ public:
     void resize(const Primative::Size &s) override;
     void set_size_limits(const Primative::Size &min,
                          const Primative::Size &max) override;
+    void set_borderless(bool b) override;
     void set_title(const std::string &t) override;
     void paint() override;
     Backend::Painter *painter() const override;

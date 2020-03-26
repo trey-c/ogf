@@ -19,19 +19,19 @@
 
 #pragma once
 
+#include <ogf/gui/label.hpp>
 #include <ogf/gui/layout.hpp>
-#include <ogf/widget/label.hpp>
 
 namespace Ogf
 {
 
-namespace Widget
+namespace Gui
 {
 
-class Button : public Gui::Layout
+class Button : public Layout
 {
 public:
-    Button(const std::string &t, Gui::Widget *w);
+    Button(const std::string &t, Widget *w);
 
     nytl::Callback<void(Button &button)> on_click;
 
@@ -40,7 +40,7 @@ public:
     void children_allocate() override;
 
 private:
-    Label m_label;
+    Label *m_label;
 };
 
 }

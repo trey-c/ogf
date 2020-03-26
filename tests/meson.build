@@ -20,4 +20,3 @@ endif
 
 subdir('core')
 subdir('gui')
-subdir('widget')

@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/window.hpp>
+#include <ogf/gui/window.hpp>
 
 #include <dlg/dlg.hpp>
 #include <ogf/core/application.hpp>
@@ -25,16 +25,16 @@
 namespace Ogf
 {
 
-namespace Widget
+namespace Gui
 {
 
 Window::Window(const std::string &t, std::shared_ptr<Core::Application> a)
-    : Layout(nullptr), m_client(nullptr), m_application(a)
+    : Layout(nullptr), m_client(nullptr), m_application(a), m_titlebar(nullptr)
 {
-    _init_client(t);
-
     style().set_background(Primative::Color(33, 33, 33, 255));
     style().set_border(Primative::Color(33, 33, 33), 0, 5);
+
+    _init_client(t);
 
     on_paint.clear();
     on_paint += [this](Backend::Painter &p) {
@@ -45,6 +45,8 @@ Window::Window(const std::string &t, std::shared_ptr<Core::Application> a)
     on_quit += [this]() {
         close(false);
     };
+
+    m_titlebar = new Titlebar(t, this);
 }
 
 void Window::set_title(const std::string &t)
@@ -60,10 +62,23 @@ void Window::close(bool e)
     hide();
 }
 
+void Window::use_native_titlebar()
+{
+    m_client->set_borderless(false);
+    m_titlebar->hide();
+}
+
+void Window::use_no_titlebar()
+{
+    m_client->set_borderless(true);
+    m_titlebar->hide();
+}
+
 void Window::show()
 {
     m_client->map();
 
+    m_titlebar->show_all();
     Widget::show();
 }
 
@@ -80,12 +95,19 @@ void Window::children_allocate()
     Primative::Size child_size;
     Primative::Size new_min_size;
 
+    m_titlebar->set_size_easy(Primative::Size(size.width, 30));
+    set_min_size(m_titlebar->min_size);
+
     for (auto child : children()) {
+        if (child == m_titlebar)
+            continue;
+
         child_position.x = style().border_thickness();
-        child_position.y = style().border_thickness();
+        child_position.y = style().border_thickness() + m_titlebar->size.height;
 
         child_size.width = size.width - (style().border_thickness() * 2);
-        child_size.height = size.height - (style().border_thickness() * 2);
+        child_size.height = (size.height - (style().border_thickness() * 2) -
+                             m_titlebar->size.height);
 
         child->position = child_position;
         child->set_size_easy(child_size);
@@ -121,7 +143,7 @@ void Window::set_min_size(const Primative::Size &s)
 
     min_size = s;
 
-    m_client->set_size_limits(s, Primative::Size(-1, -1));
+    m_client->set_size_limits(s, Primative::Size(0, 0));
 }
 
 void Window::repaint(bool r)
@@ -135,8 +157,8 @@ void Window::repaint(bool r)
 
 void Window::_init_client(const std::string &t)
 {
-    m_client = m_application->driver()->create_client(Primative::Size(
-        style().border_thickness(), style().border_thickness()));
+    m_client =
+        m_application->driver()->create_client(Primative::Size(400, 400));
 
     m_client->on_paint += [this](Backend::Painter &p) {
         on_paint(*m_client->painter());
@@ -150,6 +172,8 @@ void Window::_init_client(const std::string &t)
 
     m_client->on_key_press += [this](int k, const Primative::Point &p) {
         on_key_press(k, p);
+
+        on_quit();
     };
 
     m_client->on_mouse_move += [this](const Primative::Point &p) {
@@ -169,6 +193,7 @@ void Window::_init_client(const std::string &t)
     };
 
     m_client->set_title(t);
+    m_client->set_borderless(false);
 }
 
 }

@@ -1,7 +1,13 @@
 gui_src = [
+    'box.cpp',
+    'button.cpp',
+    'label.cpp',
     'layout.cpp',
+    'spacer.cpp',
     'style.cpp',
-    'widget.cpp'
+    'titlebar.cpp',
+    'widget.cpp',
+    'window.cpp'
 ]
 
 gui_deps = [

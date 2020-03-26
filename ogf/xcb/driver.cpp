@@ -169,14 +169,13 @@ void Driver::_filter_event(xcb_generic_event_t *event)
     case XCB_CONFIGURE_NOTIFY: {
         auto *ev = (xcb_configure_notify_event_t *)event;
 
-        auto client = _find_client(&ev->event);
+        auto client = static_cast<Xcb::Client *>(_find_client(&ev->event));
 
         if (!client || client->ignore_resize)
             return;
 
-        Primative::Size size(ev->width, ev->height);
-        client->size = size;
-        client->on_resize(size);
+        client->update_geometry();
+        client->on_resize(client->size);
         break;
     }
 

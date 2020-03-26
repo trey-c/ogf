@@ -1,23 +1,15 @@
 ogf:
-    * Build commands for Linux
-    > meson setup build -Dxcb=enabled -Dwerror=false
-    > cd build
-    > ninja
-
     ogf/backend:
         - ogf/primative
         - ogf/gl
 
     ogf/core:
-        - ogf/xcb: * Linux *
+        - ogf/xcb: * Linux only
             - ogf/backend
-        - ogf/win32: * Windows *
+        - ogf/win32: * Windows only
             - ogf/backend
 
     ogf/gui:
         - ogf/core
 
-    ogf/widget:
-        - ogf/gui
-
-    * Further information is availble in each module's README file.
+    * Further information is available in each module's README file.

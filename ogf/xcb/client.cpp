@@ -20,6 +20,7 @@
 #include <ogf/xcb/client.hpp>
 
 #include <cairo-xcb.h>
+#include <dlg/dlg.hpp>
 #include <ogf/backend/painter.hpp>
 #include <string.h>
 #include <xcb/xcb_icccm.h>
@@ -34,6 +35,7 @@ Client::Client(Driver &d, const Primative::Size &s)
     : Backend::Client(s), m_driver(&d)
 {
     m_driver->add_client(*this);
+    size = s;
 
     m_gl_context = std::make_unique<Gl::Context>();
     m_painter = std::make_unique<Backend::Painter>(*m_gl_context.get());
@@ -100,26 +102,47 @@ void Client::set_size_limits(const Primative::Size &min,
 {
     xcb_size_hints_t hints;
 
-    if (min.width >= 0 || min.height >= 0) {
-        min_size.width = min.width;
-        min_size.height = min.height;
+    min_size.width = min.width;
+    min_size.height = min.height;
 
-        xcb_icccm_size_hints_set_min_size(&hints,
-                                          static_cast<int16_t>(min.width),
-                                          static_cast<int16_t>(min.height));
-    }
+    xcb_icccm_size_hints_set_min_size(&hints, static_cast<int16_t>(min.width),
+                                      static_cast<int16_t>(min.height));
 
-    if (max.width >= 0 || max.height >= 0) {
-        xcb_icccm_size_hints_set_max_size(&hints,
-                                          static_cast<int16_t>(max.width),
-                                          static_cast<int16_t>(max.height));
-    }
+    xcb_icccm_size_hints_set_max_size(&hints, static_cast<int16_t>(max.width),
+                                      static_cast<int16_t>(max.height));
 
     /* I don't know why but the display server loves to crash here */
     // xcb_icccm_set_wm_size_hints(m_driver->connection(), m_window,
     //                             XCB_ATOM_WM_NORMAL_HINTS, &hints);
 
     xcb_flush(m_driver->connection());
+}
+
+void Client::set_borderless(bool b)
+{
+    struct
+    {
+        uint32_t flags;
+        uint32_t functions;
+        uint32_t decorations;
+    } wm_hints;
+
+    wm_hints.flags = 2;
+    wm_hints.functions = 0;
+    wm_hints.decorations = !b;
+
+    xcb_intern_atom_cookie_t cookie3 =
+        xcb_intern_atom(m_driver->connection(), 0, strlen("_MOTIF_WM_HINTS"),
+                        "_MOTIF_WM_HINTS");
+    xcb_intern_atom_reply_t *reply3 =
+        xcb_intern_atom_reply(m_driver->connection(), cookie3, nullptr);
+
+    xcb_change_property(m_driver->connection(), XCB_PROP_MODE_REPLACE, m_window,
+                        reply3->atom, reply3->atom, 32, 5, &wm_hints);
+
+    xcb_flush(m_driver->connection());
+
+    free(reply3);
 }
 
 void Client::set_title(const std::string &t)
@@ -164,14 +187,14 @@ void Client::_init_window()
     xcb_create_window(m_driver->connection(), m_driver->screen()->root_depth,
                       m_window, m_driver->screen()->root,
                       static_cast<int16_t>(0), static_cast<int16_t>(0),
-                      static_cast<int16_t>(10), static_cast<int16_t>(10),
+                      static_cast<int16_t>(size.width),
+                      static_cast<int16_t>(size.height),
                       static_cast<int16_t>(10), XCB_WINDOW_CLASS_INPUT_OUTPUT,
                       m_driver->screen()->root_visual, mask, values);
 
-    _init_atoms();
+    update_geometry();
 
-    size.width = 100;
-    size.height = 100;
+    _init_atoms();
 }
 
 void Client::_init_atoms()
@@ -190,6 +213,23 @@ void Client::_init_atoms()
     xcb_change_property(m_driver->connection(), XCB_PROP_MODE_REPLACE, m_window,
                         (*atoms.wm_protocols).atom, 4, 32, 1,
                         &(*atoms.wm_delete_window).atom);
+}
+
+void Client::update_geometry()
+{
+    auto cookie = xcb_get_geometry(m_driver->connection(), m_window);
+    auto reply =
+        xcb_get_geometry_reply(m_driver->connection(), cookie, nullptr);
+
+    if (!reply)
+        return;
+
+    position.x = reply->x;
+    position.y = reply->y;
+    size.width = reply->width;
+    size.height = reply->height;
+
+    free(reply);
 }
 
 }

@@ -17,18 +17,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/button.hpp>
+#pragma once
 
-#include <assert.h>
+#include "ogf/core/application.hpp"
+#include <ogf/gui/button.hpp>
+#include <ogf/gui/window.hpp>
 
-using namespace Ogf;
-
-int main(int argc, char **argv)
+class Window : public Ogf::Gui::Window
 {
-    auto button1 = Widget::Button("Test", nullptr);
-    auto button2 = Widget::Button("Test 2", nullptr);
+public:
+    Window(std::shared_ptr<Ogf::Core::Application> a);
 
-    assert(button1.min_size.width < button2.min_size.width);
+private:
+    Ogf::Gui::Box *m_box;
+    Ogf::Gui::Label *m_status;
+    Ogf::Gui::Button *m_clicker;
+    Ogf::Gui::Button *m_reset;
+    int m_counter;
 
-    return 0;
-}
+    void _build_ui();
+};

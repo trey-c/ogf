@@ -17,19 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/backend/client.hpp>
+#include <ogf/gui/label.hpp>
 
-namespace Ogf
+#include <assert.h>
+
+using namespace Ogf;
+
+int main(int argc, char **argv)
 {
+    auto label1 = Gui::Label("Test", nullptr);
+    auto label2 = Gui::Label("Test 2", nullptr);
 
-namespace Backend
-{
+    label1.show();
+    label2.show();
 
-Client::Client(const Primative::Size &s)
-    : ignore_resize(false), size(s), position(0, 0)
-{
-}
+    assert(label1.min_size.width < label2.min_size.width);
 
-}
+    label1.set_text("Test Change");
 
+    assert(label1.min_size.width > label2.min_size.width);
+
+    return 0;
 }

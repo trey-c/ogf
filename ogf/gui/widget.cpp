@@ -28,7 +28,10 @@ namespace Gui
 {
 
 Widget::Widget(Widget *w)
-    : ignore_state_change(false), m_parent(nullptr), m_visible(false)
+    : min_size(1, 1),
+      ignore_state_change(false),
+      m_parent(nullptr),
+      m_visible(false)
 {
     _init_size_policy();
 
@@ -51,6 +54,8 @@ void Widget::repaint(bool r)
 void Widget::show()
 {
     m_visible = true;
+
+    on_state_change();
 }
 
 void Widget::hide()

@@ -38,6 +38,7 @@ public:
     bool ignore_resize;
     Primative::Size size;
     Primative::Size min_size;
+    Primative::Point position;
 
     nytl::Callback<void()> on_quit;
     nytl::Callback<void(Backend::Painter &p)> on_paint;
@@ -54,6 +55,7 @@ public:
     virtual void resize(const Primative::Size &s) = 0;
     virtual void set_size_limits(const Primative::Size &min,
                                  const Primative::Size &max) = 0;
+    virtual void set_borderless(bool b) = 0;
     virtual void set_title(const std::string &t) = 0;
     virtual void paint() = 0;
     virtual Painter *painter() const = 0;

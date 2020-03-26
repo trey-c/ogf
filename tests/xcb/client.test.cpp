@@ -41,13 +41,19 @@ int main(int argc, char **argv)
         client->painter()->fill();
     };
 
+    client->on_key_press += [&](int k, const Primative::Point &p) {
+        client->on_quit();
+    };
+
     client->map();
 
     client->set_title("Test");
     // assert(client->size() == Primative::Size(10, 10));
 
     client->resize(Primative::Size(100, 100));
-    client->set_size_limits(Primative::Size(100, 100), Primative::Size(-1, -1));
+    // client->set_size_limits(Primative::Size(100, 100), Primative::Size(-1,
+    // -1));
+    client->set_borderless(true);
     client->paint();
 
     client->on_quit += [&]() {

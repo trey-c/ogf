@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <list>
 #include <ogf/gui/widget.hpp>
+#include <vector>
 
 namespace Ogf
 {
@@ -45,13 +45,13 @@ public:
     void children_on_mouse_release(int b, const Primative::Point &p);
     void children_on_state_change();
 
-    const std::list<Widget *> &children() const;
+    const std::vector<Widget *> &children() const;
 
 protected:
     virtual void children_allocate();
 
 private:
-    std::list<Widget *> m_children;
+    std::vector<Widget *> m_children;
 
     Primative::Point _child_mouse_offset(const Widget *w,
                                          const Primative::Point &p);

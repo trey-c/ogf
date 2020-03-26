@@ -19,6 +19,7 @@
 
 #include <ogf/gui/layout.hpp>
 
+#include <algorithm>
 #include <dlg/dlg.hpp>
 
 namespace Ogf
@@ -75,23 +76,24 @@ void Layout::add(Widget &w)
 
     m_children.push_back(&w);
 
-    on_state_change();
+    // on_state_change();
 }
 
 void Layout::remove(Widget &w)
 {
-    m_children.remove(&w);
+    m_children.erase(std::remove(m_children.begin(), m_children.end(), &w),
+                     m_children.end());
 
-    on_state_change();
+    // on_state_change();
 }
 
 void Layout::show_all()
 {
-    show();
-
     for (auto child : m_children) {
         child->show();
     }
+
+    show();
 }
 
 void Layout::children_on_paint(Backend::Painter &p)
@@ -166,7 +168,7 @@ void Layout::children_on_state_change()
     }
 }
 
-const std::list<Widget *> &Layout::children() const
+const std::vector<Widget *> &Layout::children() const
 {
     return m_children;
 }

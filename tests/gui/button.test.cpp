@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/label.hpp>
+#include <ogf/gui/button.hpp>
 
 #include <assert.h>
 
@@ -25,14 +25,13 @@ using namespace Ogf;
 
 int main(int argc, char **argv)
 {
-    auto label1 = Widget::Label("Test", nullptr);
-    auto label2 = Widget::Label("Test 2", nullptr);
+    auto button1 = Gui::Button("Test", nullptr);
+    auto button2 = Gui::Button("Test 2", nullptr);
 
-    assert(label1.min_size.width < label2.min_size.width);
+    button1.show();
+    button2.show();
 
-    label1.set_text("Test Change");
-
-    assert(label1.min_size.width > label2.min_size.width);
+    assert(button1.min_size.width < button2.min_size.width);
 
     return 0;
 }

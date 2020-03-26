@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/window.hpp>
+#include <ogf/gui/window.hpp>
 
 #include <assert.h>
 

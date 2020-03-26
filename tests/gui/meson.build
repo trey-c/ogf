@@ -1,7 +1,13 @@
 gui_tests = [
+    'box',
+    'button',
+    'label',
     'layout',
+    'spacer',
     'style',
-    'widget'
+    'titlebar',
+    'widget',
+    'window'
 ]
 
 foreach test : gui_tests

@@ -1,9 +1,10 @@
 demo_src = [
-    'demo.cpp'
+    'demo.cpp',
+    'window.cpp'
 ]
 
 demo_deps = [
-    widget_dep
+    gui_dep
 ]
 
 demo = executable('demo', sources: demo_src, dependencies: demo_deps,

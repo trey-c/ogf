@@ -17,21 +17,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/button.hpp>
+#include <ogf/gui/button.hpp>
 
 #include <dlg/dlg.hpp>
 
 namespace Ogf
 {
 
-namespace Widget
+namespace Gui
 {
 
-Button::Button(const std::string &t, Gui::Widget *w)
-    : Layout(w), m_label(t, this)
+Button::Button(const std::string &t, Widget *w) : Layout(w)
 {
-    m_label.set_text(t);
-    m_label.show();
+    m_label = new Label(t, this);
+    m_label->set_text(t);
 
     style().set_background(Primative::Color(55, 55, 55, 255));
     style().set_border(Primative::Color(15, 15, 15), 0, 10);
@@ -59,7 +58,7 @@ Button::Button(const std::string &t, Gui::Widget *w)
     on_mouse_enter += [this]() {
         dlg_debug("Mouse entered button with label '{}'", label().text());
 
-        /* Hovered color */
+        /* Hover color */
         style().set_background(Primative::Color(65, 65, 65, 255));
         repaint(false);
     };
@@ -71,26 +70,23 @@ Button::Button(const std::string &t, Gui::Widget *w)
         style().set_background(Primative::Color(55, 55, 55, 255));
         repaint(false);
     };
-
-    /* Should be called when Label::set_text calls repaint(true) */
-    on_state_change();
 }
 
 Label &Button::label()
 {
-    return m_label;
+    return *m_label;
 }
 
 void Button::children_allocate()
 {
-    m_label.position = Primative::Point(0, 0);
-    m_label.set_size_easy(size);
+    m_label->position = Primative::Point(0, 0);
+    m_label->set_size_easy(size);
 
     Primative::Size new_min_size;
     new_min_size.width =
-        m_label.min_size.width + style().border_thickness() * 2;
+        m_label->min_size.width + style().border_thickness() * 2;
     new_min_size.height =
-        m_label.min_size.height + style().border_thickness() * 2;
+        m_label->min_size.height + style().border_thickness() * 2;
 
     min_size = new_min_size;
 }

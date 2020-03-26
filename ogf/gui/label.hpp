@@ -25,13 +25,13 @@
 namespace Ogf
 {
 
-namespace Widget
+namespace Gui
 {
 
-class Label : public Gui::Widget
+class Label : public Widget
 {
 public:
-    Label(const std::string &t, Gui::Widget *w);
+    Label(const std::string &t, Widget *w);
 
     void set_text(const std::string &t);
 

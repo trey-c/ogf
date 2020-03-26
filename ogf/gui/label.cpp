@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <ogf/widget/label.hpp>
+#include <ogf/gui/label.hpp>
 
 #include <dlg/dlg.hpp>
 #include <string.h>
@@ -25,10 +25,10 @@
 namespace Ogf
 {
 
-namespace Widget
+namespace Gui
 {
 
-Label::Label(const std::string &t, Gui::Widget *w) : Widget(w)
+Label::Label(const std::string &t, Widget *w) : Widget(w)
 {
     set_text(t);
 
@@ -41,6 +41,9 @@ Label::Label(const std::string &t, Gui::Widget *w) : Widget(w)
         text_position.x = (position.x + size.width / 2) - (min_size.width / 2);
         text_position.y = (position.y + size.height / 2) - (min_size.height);
 
+        if (!m_font.get())
+            dlg_error("label: Font null");
+
         p.color(style().font_color());
         p.move(text_position);
         p.text(*m_font.get(), m_text);
@@ -51,8 +54,6 @@ void Label::set_text(const std::string &t)
 {
     m_text = t;
     min_size = _predict_min_size();
-
-    repaint(true);
 }
 
 const std::string &Label::text() const
