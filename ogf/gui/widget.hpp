@@ -58,10 +58,13 @@ public:
         bool horizontal_stretch;
     } size_policy;
 
+    virtual void add(Widget &w);
+    virtual void remove(Widget &w);
     virtual void repaint(bool r);
     virtual void show();
     virtual void hide();
-    virtual Backend::Client *client();
+
+    void show_all();
 
     void set_parent(Widget &w);
     void set_style(const Style &s);
@@ -73,20 +76,35 @@ public:
     const bool &visible() const;
     const bool &hovered() const;
     const Primative::Rect area() const;
+    const std::vector<Widget *> &children() const;
+
+    virtual Backend::Client *client();
 
     Backend::Client *find_client();
 
 protected:
     bool ignore_state_change;
-    nytl::Callback<void(Widget &w)> on_parent_request;
 
+    virtual void allocate_children();
+
+    void children_on_paint(Backend::Painter &p);
+    void children_on_key_press(int k, const Primative::Point &p);
+    void children_on_key_release(int k, const Primative::Point &p);
+    void children_on_mouse_move(const Primative::Point &p);
+    void children_on_mouse_press(int b, const Primative::Point &p);
+    void children_on_mouse_release(int b, const Primative::Point &p);
+    void children_on_state_change();
     void paint_style(Backend::Painter &p);
+
+    Primative::Point child_position_offset(const Widget *w,
+                                           const Primative::Point &p);
 
 private:
     Widget *m_parent;
     Style m_style;
     bool m_visible;
     bool m_hovered;
+    std::vector<Widget *> m_children;
 
     void _init_size_policy();
 };

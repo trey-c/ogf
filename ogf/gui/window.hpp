@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <ogf/backend/client.hpp>
-#include <ogf/gui/layout.hpp>
 #include <ogf/gui/titlebar.hpp>
 #include <string>
 
@@ -31,7 +30,7 @@ namespace Ogf
 namespace Gui
 {
 
-class Window : public Layout
+class Window : public Widget
 {
 public:
     Window(const std::string &t, std::shared_ptr<Core::Application> a);
@@ -43,7 +42,7 @@ public:
     void use_native_titlebar();
     void use_no_titlebar();
 
-    void children_allocate() override;
+    void allocate_children() override;
     void show() override;
     void hide() override;
     Backend::Client *client() override;

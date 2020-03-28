@@ -23,7 +23,6 @@
 #include <ogf/gui/box.hpp>
 #include <ogf/gui/button.hpp>
 #include <ogf/gui/label.hpp>
-#include <ogf/gui/layout.hpp>
 #include <ogf/gui/spacer.hpp>
 
 namespace Ogf
@@ -32,13 +31,12 @@ namespace Ogf
 namespace Gui
 {
 
-class Titlebar : public Layout
+class Titlebar : public Widget
 {
 public:
     Titlebar(const std::string &t, Widget *w);
 
-    void show() override;
-    void children_allocate() override;
+    void allocate_children() override;
 
 private:
     Backend::Client *m_client;

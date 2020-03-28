@@ -35,12 +35,55 @@ Widget::Widget(Widget *w)
 {
     _init_size_policy();
 
-    on_parent_request += [](Widget &w) {
-        dlg_error("Widget can't be a parent");
+    on_paint += [this](Backend::Painter &p) {
+        paint_style(p);
+
+        children_on_paint(p);
+    };
+
+    on_key_press += [this](int k, const Primative::Point &p) {
+        children_on_key_press(k, p);
+    };
+
+    on_mouse_move += [this](const Primative::Point &p) {
+        children_on_mouse_move(p);
+    };
+
+    on_mouse_press += [this](int b, const Primative::Point &p) {
+        children_on_mouse_press(b, p);
+    };
+
+    on_mouse_release += [this](int b, const Primative::Point &p) {
+        children_on_mouse_release(b, p);
+    };
+
+    on_state_change += [this]() {
+        if (ignore_state_change)
+            return;
+
+        allocate_children();
+
+        children_on_state_change();
     };
 
     if (w)
-        w->on_parent_request(*this);
+        w->add(*this);
+}
+
+void Widget::add(Widget &w)
+{
+    if (w.parent())
+        return;
+
+    w.set_parent(*this);
+
+    m_children.push_back(&w);
+}
+
+void Widget::remove(Widget &w)
+{
+    m_children.erase(std::remove(m_children.begin(), m_children.end(), &w),
+                     m_children.end());
 }
 
 void Widget::repaint(bool r)
@@ -63,9 +106,13 @@ void Widget::hide()
     m_visible = false;
 }
 
-Backend::Client *Widget::client()
+void Widget::show_all()
 {
-    return nullptr;
+    for (auto child : m_children) {
+        child->show_all();
+    }
+
+    show();
 }
 
 void Widget::set_parent(Widget &w)
@@ -114,17 +161,85 @@ const Primative::Rect Widget::area() const
     return Primative::Rect(position, size);
 }
 
-Backend::Client *Widget::find_client()
+const std::vector<Widget *> &Widget::children() const
 {
-    auto widget = &(*this);
+    return m_children;
+}
 
-    while (widget->parent() != nullptr)
-        widget = widget->parent();
+void Widget::allocate_children()
+{
+}
 
-    if (!widget->client())
-        dlg_warn("widget: Cannot find client");
+void Widget::children_on_paint(Backend::Painter &p)
+{
+    for (auto child : m_children) {
+        p.save();
+        p.translate(child->position);
 
-    return widget->client();
+        p.rect(Primative::Rect(0, 0, child->size.width, child->size.height));
+        p.clip();
+
+        child->on_paint(p);
+        p.restore();
+    }
+}
+
+void Widget::children_on_key_press(int k, const Primative::Point &p)
+{
+    for (auto child : m_children) {
+        if (child->area().contains(p))
+            child->on_key_press(k, child_position_offset(child, p));
+    }
+}
+
+void Widget::children_on_key_release(int k, const Primative::Point &p)
+{
+    for (auto child : m_children) {
+        if (child->area().contains(p))
+            child->on_key_release(k, child_position_offset(child, p));
+    }
+}
+
+void Widget::children_on_mouse_move(const Primative::Point &p)
+{
+    for (auto child : m_children) {
+        if (child->area().contains(p)) {
+            if (!child->hovered()) {
+                child->set_hovered(true);
+                child->on_mouse_enter();
+            }
+
+            child->on_mouse_move(child_position_offset(child, p));
+        } else {
+            if (child->hovered()) {
+                child->set_hovered(false);
+                child->on_mouse_leave();
+            }
+        }
+    }
+}
+
+void Widget::children_on_mouse_press(int b, const Primative::Point &p)
+{
+    for (auto child : m_children) {
+        if (child->area().contains(p))
+            child->on_mouse_press(b, child_position_offset(child, p));
+    }
+}
+
+void Widget::children_on_mouse_release(int b, const Primative::Point &p)
+{
+    for (auto child : m_children) {
+        if (child->area().contains(p))
+            child->on_mouse_release(b, child_position_offset(child, p));
+    }
+}
+
+void Widget::children_on_state_change()
+{
+    for (auto child : m_children) {
+        child->on_state_change();
+    }
 }
 
 void Widget::paint_style(Backend::Painter &p)
@@ -138,6 +253,30 @@ void Widget::paint_style(Backend::Painter &p)
         p.rect(Primative::Rect(0, 0, size.width, size.height));
         p.stroke();
     }
+}
+
+Primative::Point Widget::child_position_offset(const Widget *w,
+                                               const Primative::Point &p)
+{
+    return Primative::Point(p.x - w->position.x, p.y - w->position.y);
+}
+
+Backend::Client *Widget::client()
+{
+    return nullptr;
+}
+
+Backend::Client *Widget::find_client()
+{
+    auto widget = &(*this);
+
+    while (widget->parent() != nullptr)
+        widget = widget->parent();
+
+    if (!widget->client())
+        dlg_warn("widget: Cannot find client");
+
+    return widget->client();
 }
 
 void Widget::_init_size_policy()

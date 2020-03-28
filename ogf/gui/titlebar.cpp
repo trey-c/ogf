@@ -28,7 +28,7 @@ namespace Gui
 {
 
 Titlebar::Titlebar(const std::string &t, Widget *w)
-    : Layout(w), m_client(nullptr), m_pressed(false), m_drag(false)
+    : Widget(w), m_client(nullptr), m_pressed(false), m_drag(false)
 {
     style().set_background(Primative::Color(25, 25, 25, 255));
     style().set_border(Primative::Color(0, 0, 0), 0, 0);
@@ -93,14 +93,7 @@ Titlebar::Titlebar(const std::string &t, Widget *w)
     };
 }
 
-void Titlebar::show()
-{
-    m_box->show_all();
-
-    Widget::show();
-}
-
-void Titlebar::children_allocate()
+void Titlebar::allocate_children()
 {
     m_box->set_size_easy(size);
     min_size = m_box->min_size;

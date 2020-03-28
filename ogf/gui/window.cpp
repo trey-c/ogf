@@ -29,7 +29,7 @@ namespace Gui
 {
 
 Window::Window(const std::string &t, std::shared_ptr<Core::Application> a)
-    : Layout(nullptr), m_client(nullptr), m_application(a), m_titlebar(nullptr)
+    : Widget(nullptr), m_client(nullptr), m_application(a), m_titlebar(nullptr)
 {
     style().set_background(Primative::Color(33, 33, 33, 255));
     style().set_border(Primative::Color(33, 33, 33), 0, 5);
@@ -89,7 +89,7 @@ void Window::hide()
     Widget::hide();
 }
 
-void Window::children_allocate()
+void Window::allocate_children()
 {
     Primative::Point child_position;
     Primative::Size child_size;

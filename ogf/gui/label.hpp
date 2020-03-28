@@ -20,7 +20,7 @@
 #pragma once
 
 #include <ogf/backend/font.hpp>
-#include <ogf/gui/layout.hpp>
+#include <ogf/gui/widget.hpp>
 
 namespace Ogf
 {

@@ -29,7 +29,7 @@ namespace Gui
 {
 
 Box::Box(const Orientation &o, int g, Widget *w)
-    : Layout(w), m_orientation(o), m_gap(g)
+    : Widget(w), m_orientation(o), m_gap(g)
 {
     on_paint.clear();
     on_paint += [this](Backend::Painter &p) {
@@ -47,7 +47,7 @@ const Box::Orientation &Box::orientation() const
     return m_orientation;
 }
 
-void Box::children_allocate()
+void Box::allocate_children()
 {
     Primative::Size new_min_size;
     Primative::Point new_child_pos;

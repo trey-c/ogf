@@ -27,7 +27,7 @@ namespace Ogf
 namespace Gui
 {
 
-Button::Button(const std::string &t, Widget *w) : Layout(w)
+Button::Button(const std::string &t, Widget *w) : Widget(w)
 {
     m_label = new Label(t, this);
     m_label->set_text(t);
@@ -77,7 +77,7 @@ Label &Button::label()
     return *m_label;
 }
 
-void Button::children_allocate()
+void Button::allocate_children()
 {
     m_label->position = Primative::Point(0, 0);
     m_label->set_size_easy(size);

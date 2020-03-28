@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <ogf/gui/layout.hpp>
+#include <ogf/gui/widget.hpp>
 
 namespace Ogf
 {
@@ -27,7 +27,7 @@ namespace Ogf
 namespace Gui
 {
 
-class Box : public Layout
+class Box : public Widget
 {
 public:
     enum Orientation
@@ -42,7 +42,7 @@ public:
 
     const Orientation &orientation() const;
 
-    void children_allocate() override;
+    void allocate_children() override;
 
 private:
     Orientation m_orientation;

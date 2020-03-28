@@ -2,7 +2,6 @@ gui_tests = [
     'box',
     'button',
     'label',
-    'layout',
     'spacer',
     'style',
     'titlebar',

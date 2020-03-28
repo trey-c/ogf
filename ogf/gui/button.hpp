@@ -20,7 +20,6 @@
 #pragma once
 
 #include <ogf/gui/label.hpp>
-#include <ogf/gui/layout.hpp>
 
 namespace Ogf
 {
@@ -28,7 +27,7 @@ namespace Ogf
 namespace Gui
 {
 
-class Button : public Layout
+class Button : public Widget
 {
 public:
     Button(const std::string &t, Widget *w);
@@ -37,7 +36,7 @@ public:
 
     Label &label();
 
-    void children_allocate() override;
+    void allocate_children() override;
 
 private:
     Label *m_label;
