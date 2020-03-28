@@ -12,6 +12,7 @@ warnings = [
 ]
 
 cc = meson.get_compiler('cpp')
+pkg = import('pkgconfig')
 
 add_project_arguments(cc.get_supported_arguments(warnings), language: 'cpp')
 
