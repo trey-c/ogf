@@ -4,6 +4,8 @@
 
 `ogf` is an open source, lightweight, multi-platform GUI framework with a focus on modern graphics and scalability.
 
+![Demo](demo/demo.png)
+
 ### Features
 
 * 7 extendable widgets
@@ -45,6 +47,7 @@ ninja
 ```
 
 See the [README](ogf/README) file in the ogf/ source tree for more information. 
+
 
 ### License
 
