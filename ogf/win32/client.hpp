@@ -45,6 +45,7 @@ public:
     void resize(const Primative::Size &s) override;
     void set_size_limits(const Primative::Size &min,
                          const Primative::Size &max) override;
+    void set_borderless(bool b) override;
     void set_title(const std::string &t) override;
     void paint();
     Backend::Painter *painter() const override;

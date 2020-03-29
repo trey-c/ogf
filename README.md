@@ -6,7 +6,7 @@
 
 ### Features
 
-* 6 extendable widgets
+* 7 extendable widgets
 * Supports gl
 * Supports xcb
 * Supports win32

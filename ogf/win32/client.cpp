@@ -72,8 +72,9 @@ void Client::unmap()
 
 void Client::move(const Primative::Point &p)
 {
-    SetWindowPos(window, 0, p.x, p.y, 0, 0,
-                 SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+    SetWindowPos(window, 0, p.x, p.y, 0, 0, SWP_NOSIZE);
+
+    UpdateWindow(window);
 }
 
 void Client::resize(const Primative::Size &s)
@@ -91,6 +92,17 @@ void Client::set_size_limits(const Primative::Size &min,
                              const Primative::Size &max)
 {
     min_size = min;
+}
+
+void Client::set_borderless(bool b)
+{
+    if (b)
+        SetWindowLongPtrW(window, GWL_STYLE,
+                          WS_POPUP);
+    else
+        SetWindowLongPtr(window, GWLP_USERDATA, (LONG_PTR)this);
+
+    UpdateWindow(window);
 }
 
 void Client::set_title(const std::string &t)
@@ -130,6 +142,8 @@ void Client::_init_window(const Primative::Size &s)
                             CW_USEDEFAULT, CW_USEDEFAULT, s.width, s.height,
                             nullptr, nullptr, m_driver->instance(), nullptr);
 
+    set_borderless(false);
+
     SetWindowLongPtr(window, GWLP_USERDATA, (LONG_PTR)this);
 
     UpdateWindow(window);
@@ -153,7 +167,8 @@ LRESULT CALLBACK Client::_window_proc(HWND win, UINT msg, WPARAM wp, LPARAM lp)
         Primative::Size new_size(result.right - result.left,
                                  result.bottom - result.top);
 
-        if (client && new_size != client->size {
+        if (client && new_size != client->size &&
+            client->ignore_resize == false) {
             client->size = new_size;
             client->on_resize(new_size);
         }

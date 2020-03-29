@@ -1,6 +1,7 @@
 gui_src = [
     'box.cpp',
     'button.cpp',
+    'canvas.cpp',
     'label.cpp',
     'spacer.cpp',
     'style.cpp',
@@ -12,6 +13,7 @@ gui_src = [
 gui_headers = [
     'box.hpp',
     'button.hpp',
+    'canvas.hpp',
     'label.hpp',
     'spacer.hpp',
     'style.hpp',

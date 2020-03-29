@@ -83,6 +83,7 @@ Titlebar::Titlebar(const std::string &t, Widget *w)
     m_title->set_text(t);
 
     m_spacer = new Spacer(true, Primative::Size(5, 5), m_box);
+    m_spacer->style().set_background(Primative::Color(25, 25, 25, 255));
 
     m_min = new Button("-", m_box);
     m_max = new Button("[]", m_box);

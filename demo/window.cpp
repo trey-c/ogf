@@ -29,14 +29,15 @@ Window::Window(std::shared_ptr<Core::Application> a)
 
 void Window::_build_ui()
 {
-    m_box = new Gui::Box(Gui::Box::Orientation::VERTICAL, 20, this);
+    m_box = new Gui::Box(Gui::Box::Orientation::VERTICAL, 5, this);
 
     m_status = new Gui::Label("Counter", m_box);
+    m_status->size_policy.vertical_stretch = true;
     m_status->set_text("Counter");
 
     m_clicker = new Gui::Button("Clicker", m_box);
     m_reset = new Gui::Button("Reset", m_box);
-
+    
     m_clicker->on_click += [this](Gui::Button &b) {
         m_status->set_text("Clicker " + std::to_string(++m_counter));
         m_status->repaint(true);

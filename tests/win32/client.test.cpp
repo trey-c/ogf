@@ -33,8 +33,8 @@ int main(int argc, char **argv)
     auto font = client->painter()->create_font("Sans Bold", 11);
 
     client->on_paint += [&](Backend::Painter &p) {
-        client->painter()->rect(Primative::Rect(0, 0, client->size().width(),
-                                                client->size().height()));
+        client->painter()->rect(
+            Primative::Rect(0, 0, client->size.width, client->size.height));
         client->painter()->color(Primative::Color(33, 33, 33));
         client->painter()->fill();
         client->painter()->color(Primative::Color(255, 255, 255));
@@ -42,7 +42,9 @@ int main(int argc, char **argv)
         client->painter()->fill();
     };
 
-    client->resize(Primative::Size(800, 800));
+    client->map();
+    client->resize(Primative::Size(640, 480));
+    client->move(Primative::Point(50, 50));
     client->paint();
 
     client->on_mouse_press += [](int b, const Primative::Point &p) {
@@ -56,6 +58,8 @@ int main(int argc, char **argv)
     client->on_quit += [&]() {
         driver.exit();
     };
+
+    client->on_quit();
 
     return driver.main_loop();
 }
